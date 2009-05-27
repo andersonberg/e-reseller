@@ -156,6 +156,7 @@ public class RepositorioEstoquesMySQL implements RepositorioEstoques {
             String query = "DELETE FROM estoque_est WHERE id_prod= '" + id_prod+"'";
             stmt = gerenciador.getConnection().createStatement();
             int i = stmt.executeUpdate(query);
+            resp = true;
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);
