@@ -91,7 +91,7 @@ public class ProdutoTest {
     public void testGetCaracteristicas_prod() {
         System.out.println("getCaracteristicas_prod");
         Produto produto = new Produto(1, "Livrao", "Comedia", "25x13", "300", "Entretenimento", 123);
-        String expResult = "Livreto";
+        String expResult = "Comedia";
         String result = produto.getCaracteristicas_prod();
         assertEquals(expResult, result);
     }
