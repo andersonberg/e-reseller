@@ -188,6 +188,7 @@ public class RepositorioVendasMySQL implements RepositorioVendas {
             String query = "DELETE FROM venda_ven WHERE id_ven= " + venda.getId_ven();
             stmt = gerenciador.getConnection().createStatement();
             int i = stmt.executeUpdate(query);
+            resp = true;
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);
