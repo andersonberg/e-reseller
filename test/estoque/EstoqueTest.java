@@ -187,7 +187,7 @@ public class EstoqueTest {
     @Test
     public void testSetDthr_atualizacao() {
         System.out.println("setDthr_atualizacao");
-        Date dthr_atualizacao = Date.valueOf(new java.text.SimpleDateFormat("yyyy-mm-dd").format(new java.util.Date(System.currentTimeMillis())));;
+        Date dthr_atualizacao = Date.valueOf(new java.text.SimpleDateFormat("yyyy-mm-dd").format(new java.util.Date(System.currentTimeMillis())));
         this.estoque.setDthr_atualizacao(dthr_atualizacao);
         // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
