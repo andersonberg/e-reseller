@@ -1,0 +1,112 @@
+body,td,th {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #666666;
+}
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	background-position:top;
+	background-image:url(../img/si2009.jpg);
+	background-repeat:no-repeat
+}
+a:link {
+	color: #CA0F16;
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+	color: #CA0F16;
+}
+
+.noPrint { display: none; }
+
+a:hover {
+	text-decoration: underline;
+	color: #CA0F16;
+}
+a:active {
+	text-decoration: none;
+	color: #CA0F16;
+}
+input {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #333333;
+	background-color: #EDEDED;
+	border: 1px solid #999999;
+}
+select {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #333333;
+	text-decoration: none;
+	background-color: #EDEDED;
+	height: 18px;
+}
+.menu_sup {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #CA0F16;
+	text-decoration: none;
+}
+a.menu_sup:link {
+	color: #CA0F16;
+	text-decoration: none;
+}
+a.menu_sup:visited {
+	text-decoration: none;
+	color: #CA0F16;
+}
+a.menu_sup:hover {
+	text-decoration: underline;
+	color: #CA0F16;
+}
+a.menu_sup:active {
+	text-decoration: none;
+	color: #CA0F16;
+}
+#menu, #menu a{
+	color:#666666;
+	}
+.btabela_grande {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:9px;
+}
+
+.btabela_relatorio {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:9px;
+    
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-right-style: solid;
+  vertical-align: middle;
+  border-top-color: black;
+  border-bottom-color: black;
+  border-left-color: black;
+  border-right-color: black;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-right-width: 1px;
+}
+
+.sub_titulo {
+	color: #CA0F16;
+	font-weight:bold;
+}
+.titulo {
+	font-size: 11px;
+	font-weight: bold;
+}
+.titulo_topo {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #CA0F16;
+	text-decoration: none;
+	font-weight: bold;
+}

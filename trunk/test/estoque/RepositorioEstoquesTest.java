@@ -106,7 +106,7 @@ public class RepositorioEstoquesTest {
     /**
      * Test of remover method, of class RepositorioEstoques.
      */
-//    @Ignore
+    @Ignore
     @Test
     public void testRemover() throws Exception {
         System.out.println("remover");
