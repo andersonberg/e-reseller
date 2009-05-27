@@ -7,6 +7,7 @@ package venda;
 
 import java.sql.Date;
 import java.util.Collection;
+import java.util.Vector;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -26,7 +27,7 @@ public class RepositorioVendasMySQLTest {
 
     public RepositorioVendasMySQLTest() throws Exception {
         String data = (new java.text.SimpleDateFormat("yyyy-mm-dd").format(new java.util.Date(System.currentTimeMillis())));
-        this.venda = new Venda(1, 1, 1, 10, 1000, "3 meses", 1, Date.valueOf(data));
+        this.venda = new Venda(1, 12, 2, 10, 1000, "3 meses", 1, Date.valueOf(data));
         this.repositorioVendas = new RepositorioVendasMySQL();
     }
 
@@ -54,7 +55,7 @@ public class RepositorioVendasMySQLTest {
     public void testProcurar() throws Exception {
         System.out.println("procurar");
         int id = 12;
-        int tipo = 2;
+        int tipo = 1;
         Venda esperado = this.venda;
         Venda result = this.repositorioVendas.procurar(id, tipo);
         assertEquals(esperado.getId_ven(), result.getId_ven());
@@ -77,18 +78,18 @@ public class RepositorioVendasMySQLTest {
     /**
      * Test of procurarVendas method, of class RepositorioVendasMySQL.
      */
-    @Ignore
+//    @Ignore
     @Test
     public void testProcurarVendas_int_int() throws Exception {
         System.out.println("procurarVendas");
-        int id = 0;
-        int tipo = 0;
-        RepositorioVendasMySQL instance = new RepositorioVendasMySQL();
-        Collection expResult = null;
-        Collection result = instance.procurarVendas(id, tipo);
-        assertEquals(expResult, result);
+        int id = 12;
+        int tipo = 1;
+        Collection esperado = new Vector();
+        esperado.add(this.venda);
+        Collection result = this.repositorioVendas.procurarVendas(id, tipo);
+        assertArrayEquals(esperado.toArray(), result.toArray());
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+//        fail("The test case is a prototype.");
     }
 
     /**
@@ -113,7 +114,7 @@ public class RepositorioVendasMySQLTest {
     /**
      * Test of remover method, of class RepositorioVendasMySQL.
      */
-//    @Ignore
+    @Ignore
     @Test
     public void testRemover() throws Exception {
         System.out.println("remover");
