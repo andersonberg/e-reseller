@@ -12,6 +12,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 import static org.junit.Assert.*;
 
 /**
@@ -49,11 +50,11 @@ public class RepositorioEstoquesMySQLTest {
     /**
      * Test of inserir method, of class RepositorioEstoquesMySQL.
      */
+    @Ignore
     @Test
     public void testInserir() throws Exception {
         System.out.println("inserir");
-        Estoque estoque = null;
-        this.repositorio.inserir(estoque);
+        this.repositorio.inserir(this.estoque);
         // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
     }
@@ -62,33 +63,36 @@ public class RepositorioEstoquesMySQLTest {
     /**
      * Test of procurar method, of class RepositorioEstoquesMySQL.
      */
+    @Ignore
     @Test
     public void testProcurar() throws Exception {
         System.out.println("procurar");
-        int id_prod = 0;
-        Estoque expResult = null;
+        int id_prod = 12;
+        Estoque esperado = this.estoque;
         Estoque result = this.repositorio.procurar(id_prod);
-        assertEquals(expResult, result);
+        assertEquals(esperado.getId_est(), result.getId_est());
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+//        fail("The test case is a prototype.");
     }
 
     /**
      * Test of atualizar method, of class RepositorioEstoquesMySQL.
      */
+    @Ignore
     @Test
     public void testAtualizar() throws Exception {
         System.out.println("atualizar");
-        Estoque estoque = null;
-        RepositorioEstoquesMySQL instance = new RepositorioEstoquesMySQL();
-        instance.atualizar(estoque);
+        Estoque estoqueLocal = this.estoque;
+        estoqueLocal.setQuantidade_est(50);
+        this.repositorio.atualizar(estoqueLocal);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+//        fail("The test case is a prototype.");
     }
 
     /**
      * Test of procurarEstoque method, of class RepositorioEstoquesMySQL.
      */
+    @Ignore
     @Test
     public void testProcurarEstoque() throws Exception {
         System.out.println("procurarEstoque");
@@ -103,16 +107,16 @@ public class RepositorioEstoquesMySQLTest {
     /**
      * Test of remover method, of class RepositorioEstoquesMySQL.
      */
+//    @Ignore
     @Test
     public void testRemover() throws Exception {
         System.out.println("remover");
-        int id_prod = 0;
-        RepositorioEstoquesMySQL instance = new RepositorioEstoquesMySQL();
-        boolean expResult = false;
-        boolean result = instance.remover(id_prod);
+        int id_prod = this.estoque.getId_prod();
+        boolean expResult = true;
+        boolean result = this.repositorio.remover(id_prod);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+//        fail("The test case is a prototype.");
     }
 
 }
