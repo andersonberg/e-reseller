@@ -66,7 +66,7 @@ public class RepositorioVendasMySQLTest {
     /**
      * Test of inserir method, of class RepositorioVendasMySQL.
      */
-    @Ignore
+//    @Ignore
     @Test
     public void testInserir() throws Exception {
         System.out.println("inserir");
