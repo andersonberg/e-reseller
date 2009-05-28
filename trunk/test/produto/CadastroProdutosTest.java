@@ -47,6 +47,17 @@ public class CadastroProdutosTest {
     }
 
     /**
+     * Test of inserir method, of class CadastroProdutos.
+     */
+    @Test
+    public void testInserir() throws Exception {
+        System.out.println("inserir");
+        Produto produtoEsperado = this.produto;
+        this.cadastroProdutos.inserir(produtoEsperado);
+    }
+
+
+        /**
      * Test of procurar method, of class CadastroProdutos.
      */
     @Test
@@ -58,16 +69,7 @@ public class CadastroProdutosTest {
         assertEquals(expResult, result);
     }
 
-    /**
-     * Test of inserir method, of class CadastroProdutos.
-     */
-    @Test
-    public void testInserir() throws Exception {
-        System.out.println("inserir");
-        Produto produtoEsperado = this.produto;
-        int result = this.cadastroProdutos.inserir(produto);
-        assertEquals(produtoEsperado, result);
-    }
+    
 
     /**
      * Test of atualizar method, of class CadastroProdutos.
