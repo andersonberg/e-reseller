@@ -4,7 +4,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import usuario.*;
+import usuario.Usuario;
+import fachada.*;
+import controladores.*;
 
 public final class acessarSistema_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
@@ -106,28 +108,18 @@ public final class acessarSistema_jsp extends org.apache.jasper.runtime.HttpJspB
       out.write("        ");
 
         } else {
-            RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
-            CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
-            int codigoUsuarioLogado = cadUsuario.liberarAcesso(login, senha);
-            if (codigoUsuarioLogado > 0) {
-                Usuario usuario = cadUsuario.procurar(codigoUsuarioLogado,1);
-                if (usuario.getId_cli() > 0) {
-                    erro = "Este Usuário não é funcionário do E-reseller para utilizar o sistema.<br><a href='index.jsp'>Tentar novamente</a>";
-        
-      out.write("\r\n");
-      out.write("        ");
-      if (true) {
-        _jspx_page_context.forward("inconsistenciaSistema.jsp" + (("inconsistenciaSistema.jsp").indexOf('?')>0? '&': '?') + org.apache.jasper.runtime.JspRuntimeLibrary.URLEncode("erro", request.getCharacterEncoding())+ "=" + org.apache.jasper.runtime.JspRuntimeLibrary.URLEncode(String.valueOf(erro), request.getCharacterEncoding()));
-        return;
-      }
-      out.write("     \r\n");
-      out.write("        \r\n");
-      out.write("        ");
+            Fachada fachada;
+            if (session.getAttribute("FACHADA").equals("")) {
+                fachada = new Fachada();
+            } else {
+                fachada = (Fachada) session.getAttribute("FACHADA");
+            }
+            Controladores controladores = new Controladores(fachada);
+            Usuario usuario = controladores.LiberarAcesso(login, senha);
 
-                } else {
-
-                    session.setAttribute("USU_AUTENTICADO", login);
-                    session.setAttribute("ID_USU_LOGADO", codigoUsuarioLogado);
+            session.setAttribute("USU_AUTENTICADO", usuario.getLogin_usu());
+            session.setAttribute("ID_USU_LOGADO", usuario.getId_usu());
+            session.setAttribute("FACHADA", fachada);
         
       out.write("\r\n");
       out.write("        ");
@@ -137,35 +129,18 @@ public final class acessarSistema_jsp extends org.apache.jasper.runtime.HttpJspB
       }
       out.write("\r\n");
       out.write("        ");
- }
-            } else {
-                erro = "Usuário não habilitado para utilizar o sistema.<br><a href='index.jsp'>Tentar novamente</a>";
-        
-      out.write("\r\n");
-      out.write("        ");
-      if (true) {
-        _jspx_page_context.forward("inconsistenciaSistema.jsp" + (("inconsistenciaSistema.jsp").indexOf('?')>0? '&': '?') + org.apache.jasper.runtime.JspRuntimeLibrary.URLEncode("erro", request.getCharacterEncoding())+ "=" + org.apache.jasper.runtime.JspRuntimeLibrary.URLEncode(String.valueOf(erro), request.getCharacterEncoding()));
-        return;
-      }
-      out.write("     \r\n");
-      out.write("        ");
 
-        }
     }
-
 } catch (Exception e) {
-    String erro = "Erro Localizado ao processar dados.<br><a href='index.jsp'>Tentar novamente</a>";
         
       out.write("\r\n");
       out.write("        ");
       if (true) {
-        _jspx_page_context.forward("inconsistenciaSistema.jsp" + (("inconsistenciaSistema.jsp").indexOf('?')>0? '&': '?') + org.apache.jasper.runtime.JspRuntimeLibrary.URLEncode("erro", request.getCharacterEncoding())+ "=" + org.apache.jasper.runtime.JspRuntimeLibrary.URLEncode(String.valueOf(erro), request.getCharacterEncoding()));
+        _jspx_page_context.forward("inconsistenciaSistema.jsp" + (("inconsistenciaSistema.jsp").indexOf('?')>0? '&': '?') + org.apache.jasper.runtime.JspRuntimeLibrary.URLEncode("erro", request.getCharacterEncoding())+ "=" + org.apache.jasper.runtime.JspRuntimeLibrary.URLEncode(String.valueOf(e.getMessage()), request.getCharacterEncoding()));
         return;
       }
       out.write(" \r\n");
       out.write("        ");
-
-
             }
         
       out.write("\r\n");

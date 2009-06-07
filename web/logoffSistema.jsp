@@ -1,5 +1,5 @@
 
-<%@page import="util.Mensagens, usuario.*" %>
+<%@page import="util.Mensagens" %>
 <%@ page session="true"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <link rel="stylesheet" type="text/css" href="estilo/si2009.css"/>
@@ -7,7 +7,8 @@
             try {
                 Mensagens msn = new Mensagens();
                 session.setAttribute("USU_AUTENTICADO", "");
-                session.setAttribute("ID_USU_LOGADO", "0");  
+                session.setAttribute("ID_USU_LOGADO", "0");
+                session.setAttribute("FACHADA", "");
 %>
 <html>
     <head>
@@ -22,7 +23,7 @@
                 </tr>
         </table></center>
         <jsp:forward page="index.jsp"/>
-<%
+        <%
 } catch (Exception e) {
     String erro = "Erro Localizado ao processar dados.<br><a href='index.jsp'>Tentar novamente</a>";
         %>

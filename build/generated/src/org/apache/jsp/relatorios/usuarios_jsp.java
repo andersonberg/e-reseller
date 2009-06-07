@@ -4,8 +4,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import usuario.*;
-import cliente.*;
+import usuario.Usuario;
+import cliente.Cliente;
+import fachada.Fachada;
 import java.util.*;
 
 public final class usuarios_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -71,19 +72,15 @@ public final class usuarios_jsp extends org.apache.jasper.runtime.HttpJspBase
       }
       out.write("    \r\n");
  } else {
-
+    Fachada fachada = (Fachada) session.getAttribute("FACHADA");
 //DADOS USUARIO
-    RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
-    CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
-    Collection usuarios = cadUsuario.procurarUsuarios();
+    Collection usuarios = fachada.procurarUsuarios();
     Iterator iUsuarios = usuarios.iterator();
 
 //DADOS CLIENTE
-    RepositorioClientes repCliente = new RepositorioClientesMySQL();
-    CadastroClientes cadCliente = new CadastroClientes(repCliente);
     Cliente cliente = null;
-    
-    String nomeCliente ="";
+
+    String nomeCliente = "";
 
       out.write("\r\n");
       out.write("\r\n");
@@ -116,10 +113,10 @@ public final class usuarios_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                    <br><br><br><br><br><br><br><br><br><a href=\"../sistema.jsp\">Home</a></td></tr>\r\n");
       out.write("                    <tr>\r\n");
       out.write("                        <td align=\"center\" class=\"titulo_topo\">Usuários Cadastrados</td>\r\n");
-      out.write("                  </tr>\r\n");
+      out.write("                    </tr>\r\n");
       out.write("                    <tr><td>\r\n");
       out.write("                            \r\n");
-      out.write("          <br>\r\n");
+      out.write("                            <br>\r\n");
       out.write("                            <table width=\"417\" border=\"0\" class=\"btabela_relatorio\">\r\n");
       out.write("                                <tr>\r\n");
       out.write("                                    <th width=\"266\" scope=\"col\" class=\"btabela_relatorio\"><div align=\"left\" class=\"titulo_topo\">Nome</div></th>\r\n");
@@ -137,28 +134,30 @@ public final class usuarios_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                                <tr>\r\n");
       out.write("                                    <td class=\"titulo\">");
       out.print(usuario.getNome_usu());
-      out.write('\r');
-      out.write('\n');
+      out.write("\r\n");
+      out.write("                                        ");
 
-if (usuario.getId_cli()>0){
-    cliente = cadCliente.procurar(usuario.getId_cli());
-    nomeCliente = "("+cliente.getNome_cli()+")";
-}else{
-     nomeCliente = ""; 
-}
+                                        if (usuario.getId_cli() > 0) {
+                                            cliente = fachada.procurarCliente(usuario.getId_cli());
+                                            nomeCliente = "(" + cliente.getNome_cli() + ")";
+                                        } else {
+                                            nomeCliente = "";
+                                        }
       out.write("<i><font color=\"#FF0000\">");
       out.print(nomeCliente);
       out.write("</font></i>                                    \r\n");
-      out.write("</td>\r\n");
+      out.write("                                    </td>\r\n");
       out.write("                                    <td><div align=\"center\">");
       out.print(usuario.getLogin_usu());
       out.write("</div></td>\r\n");
       out.write("                                    <td>\r\n");
       out.write("                                        <div align=\"center\">");
  String status = "";
-                                    if (usuario.getStatus_usu().equals("A")){
-                                        status = "ATIVO";
-                                    }else{status = "INATIVO";}
+                                        if (usuario.getStatus_usu().equals("A")) {
+                                            status = "ATIVO";
+                                        } else {
+                                            status = "INATIVO";
+                                        }
       out.print(status);
       out.write("</div></td>\r\n");
       out.write("                                </tr>\r\n");
@@ -178,18 +177,18 @@ if (usuario.getId_cli()>0){
       out.write("                            </table>\r\n");
       out.write("                            <div align=\"center\"><br>\r\n");
       out.write("                                <br>\r\n");
-      out.write("                              <input type=\"button\" value=\"Voltar\" onClick=\"javascript:location.href='index.jsp'\">\r\n");
-      out.write("                              &nbsp;&nbsp;&nbsp;\r\n");
-      out.write("                              <input type=\"button\" value=\"Imprimir\" onClick=\"javascript:window.print()\">\r\n");
-      out.write("                              <br>\r\n");
-      out.write("                              <br>\r\n");
-      out.write("                              <br>\r\n");
-      out.write("                              <br>\r\n");
-      out.write("                              <br>\r\n");
-      out.write("                              <br>\r\n");
-      out.write("                              <br>\r\n");
-      out.write("                              <br>\r\n");
-      out.write("                                    </div></td></tr>\r\n");
+      out.write("                                <input type=\"button\" value=\"Voltar\" onClick=\"javascript:location.href='index.jsp'\">\r\n");
+      out.write("                                &nbsp;&nbsp;&nbsp;\r\n");
+      out.write("                                <input type=\"button\" value=\"Imprimir\" onClick=\"javascript:window.print()\">\r\n");
+      out.write("                                <br>\r\n");
+      out.write("                                <br>\r\n");
+      out.write("                                <br>\r\n");
+      out.write("                                <br>\r\n");
+      out.write("                                <br>\r\n");
+      out.write("                                <br>\r\n");
+      out.write("                                <br>\r\n");
+      out.write("                                <br>\r\n");
+      out.write("                    </div></td></tr>\r\n");
       out.write("                    <tr><td align=\"center\">");
       out.print(msn.getMn_Rodape_Site());
       out.write("</td></tr>\r\n");

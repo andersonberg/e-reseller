@@ -52,6 +52,14 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
 
       out.write("\r\n");
       out.write("<html>\r\n");
+      out.write("    ");
+
+        //Liberando variáveis para não liberar acesso ao sistema
+            session.setAttribute("USU_AUTENTICADO", "");
+            session.setAttribute("ID_USU_LOGADO", "0");
+            session.setAttribute("FACHADA", "");
+
+      out.write("\r\n");
       out.write("<head>\r\n");
       out.write("<title>E-Reseller®</title>\r\n");
       out.write("</head>\r\n");

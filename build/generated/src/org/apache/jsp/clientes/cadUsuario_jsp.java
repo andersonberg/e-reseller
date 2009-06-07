@@ -4,8 +4,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import usuario.*;
-import cliente.*;
+import usuario.Usuario;
+import cliente.Cliente;
+import fachada.Fachada;
 import java.util.*;
 
 public final class cadUsuario_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -73,16 +74,13 @@ public final class cadUsuario_jsp extends org.apache.jasper.runtime.HttpJspBase
  }else{
 //VARIÁVEL RECUPERADA
 String codigoCli = request.getParameter("id").toString();
+Fachada fachada = (Fachada) session.getAttribute("FACHADA");
 //DADOS CLIENTE
-RepositorioClientes repCliente = new RepositorioClientesMySQL();
-CadastroClientes cadCliente = new CadastroClientes(repCliente);
-Cliente cliente = cadCliente.procurar(Integer.parseInt(codigoCli));
+Cliente cliente = fachada.procurarCliente(Integer.parseInt(codigoCli));
 //DADOS USUARIO
-RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
-CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
 Usuario usuarioManutencao = null;
 try{
-    usuarioManutencao = cadUsuario.procurar(Integer.parseInt(codigoCli),2);
+    usuarioManutencao = fachada.procurarUsuario(Integer.parseInt(codigoCli),2);
 }catch(Exception e){
     usuarioManutencao = new Usuario(0,"","","",Integer.parseInt(codigoCli),"A");
 }

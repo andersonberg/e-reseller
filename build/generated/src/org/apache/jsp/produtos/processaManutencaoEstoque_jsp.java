@@ -4,7 +4,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import estoque.*;
+import estoque.Estoque;
+import fachada.Fachada;
 import produto.exceptions.*;
 
 public final class processaManutencaoEstoque_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -71,17 +72,16 @@ public final class processaManutencaoEstoque_jsp extends org.apache.jasper.runti
 }else{
             try {
                 Mensagens msn = new Mensagens();
+                Fachada fachada = (Fachada) session.getAttribute("FACHADA");
                 String codigoProduto = (String) request.getParameter("codigoProduto").toString();
                 String quantidade = (String) request.getParameter("edtQuantidade").toString();
                 String valor = (String) request.getParameter("edtValor").toString();
                 valor = valor.replace(",", ".");
                 String usuario =(String) session.getAttribute("ID_USU_LOGADO").toString();
-                RepositorioEstoques repEstoque = new RepositorioEstoquesMySQL();
-                CadastroEstoques cadEstoque = new CadastroEstoques(repEstoque);
-                Estoque estoque = cadEstoque.procurar(Integer.parseInt(codigoProduto));
+                Estoque estoque = fachada.procurarEstoqueProduto(Integer.parseInt(codigoProduto));
                 estoque = new Estoque(estoque.getId_est(),Integer.parseInt(codigoProduto),Integer.parseInt(quantidade),Float.parseFloat(valor), Integer.parseInt(usuario));
                 String informacao = null;
-                cadEstoque.atualizar(estoque);
+                fachada.atualizarEstoque(estoque);
                 informacao = "Estoque <strong>atualizado</strong> com sucesso.";
                 
 

@@ -4,7 +4,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import cliente.*;
+import cliente.Cliente;
+import fachada.Fachada;
 import cliente.exceptions.*;
 
 public final class processaManutencaoCliente_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -75,15 +76,14 @@ public final class processaManutencaoCliente_jsp extends org.apache.jasper.runti
                 String nome = (String) request.getParameter("edtNome").toString();
                 String endereco = (String) request.getParameter("edtEndereco").toString();
                 String usuario =(String) session.getAttribute("ID_USU_LOGADO").toString();
-                RepositorioClientes repCliente = new RepositorioClientesMySQL();
-                CadastroClientes cadCliente = new CadastroClientes(repCliente);
+                Fachada fachada = (Fachada) session.getAttribute("FACHADA");
                 Cliente cliente = new Cliente(Integer.parseInt(codigoTemporario), nome, endereco, Integer.parseInt(usuario));
                 String informacao = null;
                 if (codigoTemporario.equals("0")){
-                    cadCliente.inserir(cliente);
+                    fachada.inserirCliente(cliente);
                     informacao = "Cliente <strong>cadastrado</strong> com sucesso.";
                 }else{
-                    cadCliente.atualizar(cliente);
+                    fachada.atualizarCliente(cliente);
                     informacao = "Cliente <strong>alterado</strong> com sucesso.";
                 }
                 

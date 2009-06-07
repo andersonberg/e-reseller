@@ -4,7 +4,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import usuario.*;
+import usuario.Usuario;
+import fachada.Fachada;
 
 public final class processaExclusaoUsuario_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
@@ -70,12 +71,11 @@ public final class processaExclusaoUsuario_jsp extends org.apache.jasper.runtime
 }else{
             try {
                 Mensagens msn = new Mensagens();
+                Fachada fachada = (Fachada) session.getAttribute("FACHADA");
                 String codigoUsu = request.getParameter("id").toString();
-                RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
-                CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
-                Usuario usuario = cadUsuario.procurar(Integer.parseInt(codigoUsu),1);
+                Usuario usuario = fachada.procurarUsuario(Integer.parseInt(codigoUsu),1);
                 usuario.setStatus_usu("I");
-                cadUsuario.atualizar(usuario);
+                fachada.atualizarUsuario(usuario);
 
       out.write("\r\n");
       out.write("<html>\r\n");

@@ -4,10 +4,11 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import produto.*;
-import estoque.*;
-import promocao.*;
+import produto.Produto;
+import estoque.Estoque;
+import promocao.Promocao;
 import promocao.exceptions.*;
+import fachada.Fachada;
 import java.util.*;
 import java.text.DecimalFormat;
 
@@ -74,23 +75,18 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
       }
       out.write("    \r\n");
  } else {
-DecimalFormat vf = new DecimalFormat("0.00"); 
+    DecimalFormat vf = new DecimalFormat("0.00");
+    Fachada fachada = (Fachada) session.getAttribute("FACHADA");
 //DADOS DE PRODUTO
-    RepositorioProdutos repProduto = new RepositorioProdutosMySQL();
-    CadastroProdutos cadProduto = new CadastroProdutos(repProduto);
-    Collection produtos = cadProduto.procurarProdutos();
+    Collection produtos = fachada.procurarProdutos();
     Iterator iProdutos = produtos.iterator();
 
 //DADOS DE ESTOQUE
-    RepositorioEstoques repEstoque = new RepositorioEstoquesMySQL();
-    CadastroEstoques cadEstoque = new CadastroEstoques(repEstoque);
     Estoque estoque = null;
-    
+
 //DADOS DE PROMOÇÃO
-    RepositorioPromocoes repPromocao = new RepositorioPromocoesMySQL();
-    CadastroPromocoes cadPromocao = new CadastroPromocoes(repPromocao);
-    Promocao promocao = null;    
-    
+    Promocao promocao = null;
+
 
       out.write("\r\n");
       out.write("\r\n");
@@ -104,12 +100,12 @@ DecimalFormat vf = new DecimalFormat("0.00");
       out.write("\r\n");
       out.write("<html>\r\n");
       out.write("    <style type=\"text/css\">\r\n");
-      out.write("<!--\r\n");
-      out.write(".style1 {\r\n");
-      out.write("\tcolor: #FF0000;\r\n");
-      out.write("\tfont-weight: bold;\r\n");
-      out.write("}\r\n");
-      out.write("-->\r\n");
+      out.write("        <!--\r\n");
+      out.write("        .style1 {\r\n");
+      out.write("            color: #FF0000;\r\n");
+      out.write("            font-weight: bold;\r\n");
+      out.write("        }\r\n");
+      out.write("        -->\r\n");
       out.write("    </style>\r\n");
       out.write("    <head>\r\n");
       out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n");
@@ -129,55 +125,55 @@ DecimalFormat vf = new DecimalFormat("0.00");
       out.write("                    <tr><td colspan=\"5\">\r\n");
       out.write("                            <br>\r\n");
       out.write("                            <table width=\"698\" border=\"0\" class=\"btabela_grande\">\r\n");
-      out.write("<tr>\r\n");
+      out.write("                                <tr>\r\n");
       out.write("                                    <th width=\"261\"  scope=\"col\"><div align=\"left\" class=\"titulo_topo\">Produto</div></th>\r\n");
       out.write("                                    <th width=\"44\" scope=\"col\"  colspan=\"3\" class=\"titulo_topo\">Preço</th>\r\n");
-      out.write("              <th width=\"84\" scope=\"col\" class=\"titulo_topo\">&nbsp;</th>\r\n");
-      out.write("              <th width=\"139\" scope=\"col\" class=\"titulo_topo\">Vender</th>\r\n");
-      out.write("</tr>\r\n");
+      out.write("                                    <th width=\"84\" scope=\"col\" class=\"titulo_topo\">&nbsp;</th>\r\n");
+      out.write("                                    <th width=\"139\" scope=\"col\" class=\"titulo_topo\">Vender</th>\r\n");
+      out.write("                                </tr>\r\n");
       out.write("                                ");
 
     if (!produtos.isEmpty()) {
         while (iProdutos.hasNext()) {
             Produto produto = (Produto) iProdutos.next();
-            estoque = cadEstoque.procurar(produto.getId_prod());
-            try{
-            promocao = cadPromocao.procurar(produto.getId_prod());
-            }catch(PromocaoInexistenteException e){
+            estoque = fachada.procurarEstoqueProduto(produto.getId_prod());
+            try {
+                promocao = fachada.procurarProdutoPromocao(produto.getId_prod());
+            } catch (PromocaoInexistenteException e) {
                 promocao = null;
                 e.getStackTrace();
-                
+
             }
             String valorFormatado = "";
-                               
+                                
       out.write("\r\n");
       out.write("                                <tr>\r\n");
       out.write("                                    <td class=\"titulo\">");
       out.print(produto.getDescricao_prod());
       out.write("</td>\r\n");
       out.write("                                    ");
- if(promocao==null){
+ if (promocao == null) {
       out.write("\r\n");
-      out.write("                                  <td colspan=\"3\">R$ ");
+      out.write("                                    <td colspan=\"3\">R$ ");
       out.print(vf.format(estoque.getValor_prod_est()));
       out.write("\r\n");
-      out.write("                                  <input type=\"hidden\" name=\"edtValor");
+      out.write("                                    <input type=\"hidden\" name=\"edtValor");
       out.print(produto.getId_prod());
       out.write("\" value=\"");
       out.print(estoque.getValor_prod_est());
       out.write("\"></td>\r\n");
       out.write("                                    ");
-}else{
+} else {
       out.write("\r\n");
       out.write("                                    <td  colspan=\"3\"><span class=\"style1\">DE:</span> R$ ");
       out.print(vf.format(estoque.getValor_prod_est()));
       out.write(" <span class=\"style1\">POR:</span> R$ ");
-valorFormatado = vf.format(estoque.getValor_prod_est()-estoque.getValor_prod_est()*(new Float(promocao.getDesconto_pro())/new Float(100)));
-                                    
+valorFormatado = vf.format(estoque.getValor_prod_est() - estoque.getValor_prod_est() * (new Float(promocao.getDesconto_pro()) / new Float(100)));
+                                        
       out.print(valorFormatado);
       out.write("\r\n");
-      out.write("                                    \r\n");
-      out.write("                                  <input type=\"hidden\" name=\"edtValor");
+      out.write("                                        \r\n");
+      out.write("                                    <input type=\"hidden\" name=\"edtValor");
       out.print(produto.getId_prod());
       out.write("\" value=\"");
       out.print(valorFormatado);
@@ -185,22 +181,22 @@ valorFormatado = vf.format(estoque.getValor_prod_est()-estoque.getValor_prod_est
       out.write("                                    ");
 }
       out.write("\r\n");
-      out.write("   \r\n");
-      out.write("                                  <td>&nbsp;</td>\r\n");
-      out.write("                                  <td><div align=\"center\">\r\n");
-      out.write("                                    ");
-if (estoque.getQuantidade_est()>0){
+      out.write("                                    \r\n");
+      out.write("                                    <td>&nbsp;</td>\r\n");
+      out.write("                                    <td><div align=\"center\">\r\n");
+      out.write("                                            ");
+if (estoque.getQuantidade_est() > 0) {
       out.write("\r\n");
-      out.write("                                    <input type=\"button\" name=\"Enviar\" value=\"Vender Produto\" onClick=\"Redirecionar('cadVenda.jsp?id=");
+      out.write("                                            <input type=\"button\" name=\"Enviar\" value=\"Vender Produto\" onClick=\"Redirecionar('cadVenda.jsp?id=");
       out.print( produto.getId_prod());
       out.write("')\">\r\n");
-      out.write("                                  </div></td>\r\n");
-      out.write("                                      ");
-}else{
+      out.write("                                    </div></td>\r\n");
+      out.write("                                    ");
+} else {
       out.write("Produto Indísponivel");
 }
       out.write("\r\n");
-      out.write("                                  </tr>\r\n");
+      out.write("                                </tr>\r\n");
       out.write("                                \r\n");
       out.write("                                ");
 
@@ -215,7 +211,7 @@ if (estoque.getQuantidade_est()>0){
                                 
       out.write("\r\n");
       out.write("                            </table>\r\n");
-      out.write("                      <br><br><br><br><br><br><br><br>\r\n");
+      out.write("                            <br><br><br><br><br><br><br><br>\r\n");
       out.write("                    </td></tr>\r\n");
       out.write("                    <tr><td align=\"center\">");
       out.print(msn.getMn_Rodape_Site());

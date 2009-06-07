@@ -1,4 +1,4 @@
-<%@page import="util.Mensagens, usuario.*, usuario.exceptions.*" %>
+<%@page import="util.Mensagens, usuario.Usuario,fachada.Fachada, usuario.exceptions.*" %>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <%
@@ -17,15 +17,14 @@
                 String login =(String) request.getParameter("edtLogin").toString();
                 String senha =(String) request.getParameter("edtSenha").toString();
                 String status =(String) request.getParameter("status").toString();
-                RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
-                CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
+                Fachada fachada = (Fachada) session.getAttribute("FACHADA");
                 Usuario usuario = new Usuario(Integer.parseInt(codigoTemporario), nome, login, senha, Integer.parseInt(codigoCliente),status);
                 String informacao = null;
                 if (codigoTemporario.equals("0")){
-                    cadUsuario.inserir(usuario);
+                    fachada.inserirUsuario(usuario);
                     informacao = "Usuário <strong>cadastrado</strong> com sucesso.";
                 }else{
-                    cadUsuario.atualizar(usuario);
+                    fachada.atualizarUsuario(usuario);
                     informacao = "Usuário <strong>alterado</strong> com sucesso.";
                 }
                 

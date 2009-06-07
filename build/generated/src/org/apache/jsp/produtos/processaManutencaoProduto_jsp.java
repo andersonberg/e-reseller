@@ -4,8 +4,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import produto.*;
-import estoque.*;
+import produto.Produto;
+import estoque.Estoque;
+import fachada.Fachada;
 import produto.exceptions.*;
 
 public final class processaManutencaoProduto_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -72,6 +73,7 @@ public final class processaManutencaoProduto_jsp extends org.apache.jasper.runti
 }else{
             try {
                 Mensagens msn = new Mensagens();
+                Fachada fachada = (Fachada) session.getAttribute("FACHADA");
                 String codigoTemporario = (String) request.getParameter("id").toString();
                 String descricao = (String) request.getParameter("edtNome").toString();
                 String caracteristicas = (String) request.getParameter("edtCaracteristicas").toString();
@@ -79,8 +81,6 @@ public final class processaManutencaoProduto_jsp extends org.apache.jasper.runti
                 String peso = (String) request.getParameter("edtPeso").toString();
                 String especificacao = (String) request.getParameter("edtEspec").toString();
                 String usuario =(String) session.getAttribute("ID_USU_LOGADO").toString();
-                RepositorioProdutos repProduto = new RepositorioProdutosMySQL();
-                CadastroProdutos cadProduto = new CadastroProdutos(repProduto);
                 Produto produto = new Produto(Integer.parseInt(codigoTemporario),descricao,caracteristicas,dimensao,peso,especificacao,Integer.parseInt(usuario));
                 String informacao = null;
                 if (codigoTemporario.equals("0")){
@@ -88,15 +88,14 @@ public final class processaManutencaoProduto_jsp extends org.apache.jasper.runti
                     String valor = (String) request.getParameter("edtValor").toString();
                     valor = valor.replace(",", ".");
                     //INSERINDO PRODUTO
-                    int codigoInserido = cadProduto.inserir(produto);
+                    int codigoInserido = fachada.inserirProduto(produto);
                     informacao = "Produto <strong>cadastrado</strong> com sucesso.";
                     //INSERINDO PRODUTO NO ESTOQUE
                     Estoque estoque = new Estoque(codigoInserido,Integer.parseInt(quantidade),Float.parseFloat(valor),Integer.parseInt(usuario));
-                    RepositorioEstoques repEstoque = new RepositorioEstoquesMySQL();
-                    CadastroEstoques cadEstoque = new CadastroEstoques(repEstoque);
-                    cadEstoque.inserir(estoque);
+
+                    fachada.inserirEstoque(estoque);
                 }else{
-                    cadProduto.atualizar(produto);
+                    fachada.atualizarProduto(produto);
                     informacao = "Produto <strong>alterado</strong> com sucesso.";
                 }
                 

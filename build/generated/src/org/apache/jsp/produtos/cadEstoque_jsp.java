@@ -4,8 +4,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import estoque.*;
-import produto.*;
+import estoque.Estoque;
+import produto.Produto;
+import fachada.Fachada;
 import java.util.*;
 
 public final class cadEstoque_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -72,14 +73,11 @@ public final class cadEstoque_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("    \r\n");
  }else{
 String codigoProduto = request.getParameter("id").toString();
+Fachada fachada = (Fachada) session.getAttribute("FACHADA");
 //DADOS ESTOQUE
-RepositorioEstoques repEstoque = new RepositorioEstoquesMySQL();
-CadastroEstoques cadEstoque = new CadastroEstoques(repEstoque);
-Estoque estoque = cadEstoque.procurar(Integer.parseInt(codigoProduto));
+Estoque estoque = fachada.procurarEstoqueProduto(Integer.parseInt(codigoProduto));
 //DADOS PRODUTO
-RepositorioProdutos repProd = new RepositorioProdutosMySQL();
-CadastroProdutos cadProd = new CadastroProdutos(repProd);
-Produto produto = cadProd.procurar(Integer.parseInt(codigoProduto));
+Produto produto = fachada.procurarProduto(Integer.parseInt(codigoProduto));
    
 
       out.write("\r\n");

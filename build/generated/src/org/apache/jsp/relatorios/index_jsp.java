@@ -4,8 +4,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import usuario.*;
-import cliente.*;
 import java.util.*;
 
 public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -71,19 +69,6 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
       }
       out.write("    \r\n");
  } else {
-
-//DADOS USUARIO
-    RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
-    CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
-    Collection usuarios = cadUsuario.procurarUsuarios();
-    Iterator iUsuarios = usuarios.iterator();
-
-//DADOS CLIENTE
-    RepositorioClientes repCliente = new RepositorioClientesMySQL();
-    CadastroClientes cadCliente = new CadastroClientes(repCliente);
-    Cliente cliente = null;
-    
-    String nomeCliente ="";
 
       out.write("\r\n");
       out.write("<html>\r\n");

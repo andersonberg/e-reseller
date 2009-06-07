@@ -4,7 +4,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import cliente.*;
+import cliente.Cliente;
+import fachada.Fachada;
 import java.util.*;
 
 public final class clientes_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -72,9 +73,8 @@ public final class clientes_jsp extends org.apache.jasper.runtime.HttpJspBase
  }else{
 
 
-            RepositorioClientes repCliente = new RepositorioClientesMySQL();
-            CadastroClientes cadCliente = new CadastroClientes(repCliente);
-            Collection clientes = cadCliente.procurarClientes();
+            Fachada fachada = (Fachada) session.getAttribute("FACHADA");
+            Collection clientes = fachada.procurarClientes();
             Iterator iClientes = clientes.iterator();
 
       out.write("\r\n");

@@ -4,9 +4,10 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import produto.*;
-import venda.*;
-import cliente.*;
+import produto.Produto;
+import venda.Venda;
+import cliente.Cliente;
+import fachada.Fachada;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
@@ -74,11 +75,12 @@ public final class vendas_jsp extends org.apache.jasper.runtime.HttpJspBase
       }
       out.write("    \r\n");
  } else {
+    Fachada fachada = (Fachada) session.getAttribute("FACHADA");
     String codigo = request.getParameter("id").toString();
     String relatorio = request.getParameter("tipo").toString();
-    String dtInicial="";
-    String dtFinal="";
-    String cli="";
+    String dtInicial = "";
+    String dtFinal = "";
+    String cli = "";
     if (relatorio.equals("3")) {
         dtInicial = request.getParameter("dtInicial").toString();
         dtFinal = request.getParameter("dtFinal").toString();
@@ -87,23 +89,17 @@ public final class vendas_jsp extends org.apache.jasper.runtime.HttpJspBase
     SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     DecimalFormat vf = new DecimalFormat("0.00");
 //DADOS DE VENDA
-    RepositorioVendas repVenda = new RepositorioVendasMySQL();
-    CadastroVendas cadVenda = new CadastroVendas(repVenda);
     Collection vendas = null;
     if (relatorio.equals("3")) {
-        vendas = cadVenda.procurarVendas(Integer.parseInt(codigo), Integer.parseInt(cli), dtInicial, dtFinal);
+        vendas = fachada.procurarVendas(Integer.parseInt(codigo), Integer.parseInt(cli), dtInicial, dtFinal);
     } else {
-        vendas = cadVenda.procurarVendas(Integer.parseInt(codigo), Integer.parseInt(relatorio));
+        vendas = fachada.procurarVendas(Integer.parseInt(codigo), Integer.parseInt(relatorio));
     }
     Iterator iVendas = vendas.iterator();
 
 //DADOS DE Produto
-    RepositorioProdutos repProduto = new RepositorioProdutosMySQL();
-    CadastroProdutos cadProduto = new CadastroProdutos(repProduto);
     Produto produto = null;
 //DADOS DE CLIENTES
-    RepositorioClientes repCliente = new RepositorioClientesMySQL();
-    CadastroClientes cadCliente = new CadastroClientes(repCliente);
     Cliente cliente = null;
 
 
@@ -146,11 +142,11 @@ public final class vendas_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("\r\n");
       out.write("                            <tr>\r\n");
       out.write("                                <td ><div align=\"left\">");
-produto = cadProduto.procurar(venda.getId_prod());
+produto = fachada.procurarProduto(venda.getId_prod());
       out.print(produto.getDescricao_prod());
       out.write("</div></td>\r\n");
       out.write("                                <td><div align=\"left\">");
-cliente = cadCliente.procurar(venda.getId_cli());
+cliente = fachada.procurarCliente(venda.getId_cli());
       out.print(cliente.getNome_cli());
       out.write("</div></td>\r\n");
       out.write("                                <td><div align=\"center\">");
@@ -168,8 +164,8 @@ cliente = cadCliente.procurar(venda.getId_cli());
       out.write("                            </tr>\r\n");
       out.write("                            \r\n");
       out.write("                            ");
-valorTotal = valorTotal+venda.getValor_ven();
-                                qtdTotal = qtdTotal+ venda.getQtd_ven();
+valorTotal = valorTotal + venda.getValor_ven();
+                                    qtdTotal = qtdTotal + venda.getQtd_ven();
                                 }
                             
       out.write("\r\n");

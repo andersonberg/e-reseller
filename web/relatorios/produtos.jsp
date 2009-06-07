@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="util.Mensagens,produto.*,estoque.*,java.util.*,java.text.DecimalFormat" %>
+<%@ page import="util.Mensagens,produto.Produto,estoque.Estoque,fachada.Fachada,java.util.*,java.text.DecimalFormat" %>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -13,15 +13,12 @@
 </jsp:forward>    
 <% } else {
 DecimalFormat vf = new DecimalFormat("0.00");
+Fachada fachada = (Fachada) session.getAttribute("FACHADA");
 //DADOS DE PRODUTO
-    RepositorioProdutos repProduto = new RepositorioProdutosMySQL();
-    CadastroProdutos cadProduto = new CadastroProdutos(repProduto);
-    Collection produtos = cadProduto.procurarProdutos();
+    Collection produtos = fachada.procurarProdutos();
     Iterator iProdutos = produtos.iterator();
 
 //DADOS DE ESTOQUE
-    RepositorioEstoques repEstoque = new RepositorioEstoquesMySQL();
-    CadastroEstoques cadEstoque = new CadastroEstoques(repEstoque);
     Estoque estoque = null;
 %>
 <SCRIPT language=JavaScript>
@@ -73,7 +70,7 @@ DecimalFormat vf = new DecimalFormat("0.00");
                                       <div align="center">
                                       <%
                                             try{    
-                                            estoque = cadEstoque.procurar(produto.getId_prod());
+                                            estoque = fachada.procurarEstoqueProduto(produto.getId_prod());
                                             String valorFormatado = vf.format(estoque.getValor_prod_est());
                                             %>
                                       R$ <%=valorFormatado%>
@@ -88,7 +85,7 @@ DecimalFormat vf = new DecimalFormat("0.00");
                                         <div align="center">
                                             <strong><%
                                             try{    
-                                            estoque = cadEstoque.procurar(produto.getId_prod());
+                                            estoque = fachada.procurarEstoqueProduto(produto.getId_prod());
                                             %><%= estoque.getQuantidade_est()%><%
                                             }catch(Exception e){%>
                                             (0)<%    

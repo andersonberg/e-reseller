@@ -1,4 +1,4 @@
-<%@page import="util.Mensagens, promocao.*, produto.exceptions.*" %>
+<%@page import="util.Mensagens, promocao.Promocao,fachada.Fachada, produto.exceptions.*" %>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <%
@@ -11,16 +11,15 @@
 <%}else{
             try {
                 Mensagens msn = new Mensagens();
+                Fachada fachada = (Fachada) session.getAttribute("FACHADA");
                 String codigoProduto = (String) request.getParameter("codigoProduto").toString();
                 String descricao = (String) request.getParameter("edtNome").toString();
                 String desconto = (String) request.getParameter("edtDesconto").toString();
                 String usuario =(String) session.getAttribute("ID_USU_LOGADO").toString();
-                RepositorioPromocoes repPro = new RepositorioPromocoesMySQL();
-                CadastroPromocoes cadPro = new CadastroPromocoes(repPro);
                 Promocao promocao = null;
                 promocao = new Promocao(0,Integer.parseInt(codigoProduto), descricao,Integer.parseInt(desconto), Integer.parseInt(usuario));
                 String informacao = null;
-                cadPro.inserir(promocao);
+                fachada.inserirPromocao(promocao);
                 informacao = "Promoção <strong>cadastrada</strong> com sucesso.";
                 
 %>

@@ -4,7 +4,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import produto.*;
+import produto.Produto;
+import fachada.Fachada;
 import java.util.*;
 
 public final class cadProduto_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -71,15 +72,14 @@ public final class cadProduto_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("    \r\n");
  }else{
 String codigoProd = request.getParameter("id").toString();
+Fachada fachada = (Fachada) session.getAttribute("FACHADA");
 //DADOS DE PRODUTO
-RepositorioProdutos repProd = new RepositorioProdutosMySQL();
-CadastroProdutos cadProd = new CadastroProdutos(repProd);
 Produto produtoManutencao = null;
 try{
 if (codigoProd.equals("0")){
     produtoManutencao = new Produto(0, "","","","","", 0);
 }else{
-    produtoManutencao = cadProd.procurar(Integer.parseInt(codigoProd));
+    produtoManutencao = fachada.procurarProduto(Integer.parseInt(codigoProd));
 }}catch(Exception e){
     
 }

@@ -4,8 +4,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import produto.*;
-import cliente.*;
+import produto.Produto;
+import cliente.Cliente;
+import fachada.Fachada;
 import java.util.*;
 
 public final class gerencial_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -71,49 +72,46 @@ public final class gerencial_jsp extends org.apache.jasper.runtime.HttpJspBase
       }
       out.write("    \r\n");
  } else {
-//DADOS DE PRODUTO
-    RepositorioProdutos repProduto = new RepositorioProdutosMySQL();
-    CadastroProdutos cadProduto = new CadastroProdutos(repProduto);
-    Collection produtos = cadProduto.procurarProdutos();
+    Fachada fachada = (Fachada) session.getAttribute("FACHADA");
+    //DADOS DE PRODUTO
+    Collection produtos = fachada.procurarProdutos();
     Iterator iProdutos = produtos.iterator();
 
 //DADOS DE CLIENTE
-    RepositorioClientes repCliente = new RepositorioClientesMySQL();
-    CadastroClientes cadCliente = new CadastroClientes(repCliente);
-    Collection clientes = cadCliente.procurarClientes();
+    Collection clientes = fachada.procurarClientes();
     Iterator iClientes = clientes.iterator();
 
 
       out.write("\r\n");
       out.write("<SCRIPT language=JavaScript>\r\n");
-      out.write("function maskIt(w,e,m,r,a){        // Cancela se o evento for Backspace   \r\n");
-      out.write(" if (!e) \r\n");
-      out.write(" var e = window.event    \r\n");
-      out.write(" if (e.keyCode) \r\n");
-      out.write(" code = e.keyCode;    \r\n");
-      out.write(" else if (e.which) \r\n");
-      out.write(" code = e.which;        \r\n");
-      out.write(" // Variáveis da função    \r\n");
-      out.write(" var txt  = (!r) ? w.value.replace(/[^\\d]+/gi,'') : w.value.replace(/[^\\d]+/gi,'').reverse();    \r\n");
-      out.write(" var mask = (!r) ? m : m.reverse();    \r\n");
-      out.write(" var pre  = (a ) ? a.pre : \"\";    \r\n");
-      out.write(" var pos  = (a ) ? a.pos : \"\";    \r\n");
-      out.write(" var ret  = \"\";    \r\n");
-      out.write(" if(code == 9 || code == 8 || txt.length == mask.replace(/[^#]+/g,'').length) \r\n");
-      out.write(" return false;    \r\n");
-      out.write(" // Loop na máscara para aplicar os caracteres    \r\n");
-      out.write(" for(var x=0,y=0, z=mask.length;x<z && y<txt.length;){        \r\n");
-      out.write(" if(mask.charAt(x)!='#'){            \r\n");
-      out.write(" ret += mask.charAt(x); x++;        \r\n");
-      out.write(" } else{            \r\n");
-      out.write(" ret += txt.charAt(y); \r\n");
-      out.write(" y++; \r\n");
-      out.write(" x++;        \r\n");
-      out.write(" }    }        \r\n");
-      out.write(" // Retorno da função    \r\n");
-      out.write(" ret = (!r) ? ret : ret.reverse()        \r\n");
-      out.write(" w.value = pre+ret+pos;\r\n");
-      out.write(" }\r\n");
+      out.write("    function maskIt(w,e,m,r,a){        // Cancela se o evento for Backspace   \r\n");
+      out.write("        if (!e) \r\n");
+      out.write("            var e = window.event    \r\n");
+      out.write("        if (e.keyCode) \r\n");
+      out.write("            code = e.keyCode;    \r\n");
+      out.write("        else if (e.which) \r\n");
+      out.write("            code = e.which;        \r\n");
+      out.write("        // Variáveis da função    \r\n");
+      out.write("        var txt  = (!r) ? w.value.replace(/[^\\d]+/gi,'') : w.value.replace(/[^\\d]+/gi,'').reverse();    \r\n");
+      out.write("        var mask = (!r) ? m : m.reverse();    \r\n");
+      out.write("        var pre  = (a ) ? a.pre : \"\";    \r\n");
+      out.write("        var pos  = (a ) ? a.pos : \"\";    \r\n");
+      out.write("        var ret  = \"\";    \r\n");
+      out.write("        if(code == 9 || code == 8 || txt.length == mask.replace(/[^#]+/g,'').length) \r\n");
+      out.write("            return false;    \r\n");
+      out.write("        // Loop na máscara para aplicar os caracteres    \r\n");
+      out.write("        for(var x=0,y=0, z=mask.length;x<z && y<txt.length;){        \r\n");
+      out.write("            if(mask.charAt(x)!='#'){            \r\n");
+      out.write("                ret += mask.charAt(x); x++;        \r\n");
+      out.write("            } else{            \r\n");
+      out.write("                ret += txt.charAt(y); \r\n");
+      out.write("                y++; \r\n");
+      out.write("                x++;        \r\n");
+      out.write("            }    }        \r\n");
+      out.write("        // Retorno da função    \r\n");
+      out.write("        ret = (!r) ? ret : ret.reverse()        \r\n");
+      out.write("        w.value = pre+ret+pos;\r\n");
+      out.write("    }\r\n");
       out.write(" \r\n");
       out.write("</SCRIPT>\r\n");
       out.write("<html><head>\r\n");
@@ -137,7 +135,7 @@ public final class gerencial_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                        <td align=\"right\"> <font color=\"#FF0000\">* campos Obrigatórios</font></td>\r\n");
       out.write("                    </tr>\r\n");
       out.write("                    <tr><td><br>\r\n");
-      out.write("                    Produto<font color=\"#FF0000\">*</font>:<br><select name=\"id\" id=\"id\">\r\n");
+      out.write("                            Produto<font color=\"#FF0000\">*</font>:<br><select name=\"id\" id=\"id\">\r\n");
       out.write("                                ");
 
     if (!produtos.isEmpty()) {
@@ -151,21 +149,21 @@ public final class gerencial_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.print(produto.getDescricao_prod());
       out.write("</option>");
 
-        }
-    }else{
+                                    }
+                                } else {
       out.write("\r\n");
-      out.write("\t<option value=\"0\">Não Existem produtos Cadastrados</option>\r\n");
-      out.write("\t");
+      out.write("                                <option value=\"0\">Não Existem produtos Cadastrados</option>\r\n");
+      out.write("                                ");
 }
       out.write("\r\n");
       out.write("                    </select></td></tr>\r\n");
       out.write("                    <tr>\r\n");
-      out.write("                      <td><br>Cliente (<em>Opcional</em>):<br>\r\n");
-      out.write("<select name=\"cmbCliente\" id=\"id\"><option value=\"0\">--- Todos os Cliente ---</option>\r\n");
-      out.write("                               ");
+      out.write("                        <td><br>Cliente (<em>Opcional</em>):<br>\r\n");
+      out.write("                            <select name=\"cmbCliente\" id=\"id\"><option value=\"0\">--- Todos os Cliente ---</option>\r\n");
+      out.write("                                ");
  if (!clientes.isEmpty()) {
-                                while (iClientes.hasNext()) {
-                                Cliente cliente = (Cliente) iClientes.next();
+        while (iClientes.hasNext()) {
+            Cliente cliente = (Cliente) iClientes.next();
                                 
       out.write("<option value=\"");
       out.print(cliente.getId_cli());
@@ -174,15 +172,15 @@ public final class gerencial_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.print(cliente.getNome_cli());
       out.write("</option>");
 
-        }
-    } else {
+     }
+ } else {
       out.write("<option value=\"\">Não existem Clientes cadastrados</option>");
 }
       out.write("\r\n");
       out.write("                    </select></td></tr>\r\n");
       out.write("                    <tr>\r\n");
-      out.write("                      <td><br>Período<font color=\"#FF0000\">*</font>: (<em>formato dd/mm/aaaa</em>)<br>\r\n");
-      out.write("                  <input type=\"text\" name=\"dtInicial\" maxlength=\"10\" size=\"20\" onkeyup=\"maskIt(this,event,'##/##/####')\" > a <input type=\"text\" name=\"dtFinal\" maxlength=\"10\" size=\"20\" onkeyup=\"maskIt(this,event,'##/##/####')\" ></td></tr>\r\n");
+      out.write("                        <td><br>Período<font color=\"#FF0000\">*</font>: (<em>formato dd/mm/aaaa</em>)<br>\r\n");
+      out.write("                    <input type=\"text\" name=\"dtInicial\" maxlength=\"10\" size=\"20\" onkeyup=\"maskIt(this,event,'##/##/####')\" > a <input type=\"text\" name=\"dtFinal\" maxlength=\"10\" size=\"20\" onkeyup=\"maskIt(this,event,'##/##/####')\" ></td></tr>\r\n");
       out.write("                    \r\n");
       out.write("                    <tr><td align=\"center\"><div align=\"center\"><br><br><input type=\"button\" value=\"Voltar\" onClick=\"javascript:location.href='index.jsp'\">&nbsp;&nbsp;&nbsp;<input type=\"submit\" value=\"Consultar\" ><br>\r\n");
       out.write("                            <br>\r\n");

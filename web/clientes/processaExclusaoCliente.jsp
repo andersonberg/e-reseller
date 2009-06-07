@@ -1,4 +1,4 @@
-<%@page import="util.Mensagens, cliente.*,usuario.*,usuario.exceptions.*,venda.*,venda.exceptions.*" %>
+<%@page import="util.Mensagens, cliente.Cliente,usuario.Usuario,fachada.Fachada,usuario.exceptions.*,venda.Venda,venda.exceptions.*" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <%
@@ -12,13 +12,11 @@
     try {
         Mensagens msn = new Mensagens();
         String codigoCliente = request.getParameter("id").toString();
-        
+        Fachada fachada = (Fachada) session.getAttribute("FACHADA");
                //DADOS DE VENDA
-        RepositorioVendas repVenda = new RepositorioVendasMySQL();
-        CadastroVendas cadVenda = new CadastroVendas(repVenda);
         try {
-            cadVenda.procurar(Integer.parseInt(codigoCliente), 2);
-            String erro = "Não é possível excluir produto. Registro de Venda Localizado.<br><a href='index.jsp'>Tentar novamente</a>";
+            fachada.procurarVenda(Integer.parseInt(codigoCliente), 2);
+            String erro = "Não é possível excluir este cliente. Registro de Venda Localizado.<br><a href='index.jsp'>Tentar novamente</a>";
 %>
 <jsp:forward page="inconsistenciaClientes.jsp">
     <jsp:param name="erro" value="<%=erro%>"/>
@@ -29,15 +27,11 @@
         //Não localizado PRODUTO permite a exclusão
         }
         //DADOS CLIENTE
-        RepositorioClientes repCliente = new RepositorioClientesMySQL();
-        CadastroClientes cadCliente = new CadastroClientes(repCliente);
-        Cliente cliente = cadCliente.procurar(Integer.parseInt(codigoCliente));
-        cadCliente.remover(cliente);
+        Cliente cliente = fachada.procurarCliente(Integer.parseInt(codigoCliente));
+        fachada.removerCliente(cliente);
         //DADOS USUARIO
-        RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
-        CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
         try {
-            cadUsuario.remover(Integer.parseInt(codigoCliente));
+            fachada.removerClienteUsuario(Integer.parseInt(codigoCliente));
         } catch (Exception e) {
         }
 
