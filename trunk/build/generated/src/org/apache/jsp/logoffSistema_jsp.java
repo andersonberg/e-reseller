@@ -4,7 +4,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import usuario.*;
 
 public final class logoffSistema_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
@@ -61,7 +60,8 @@ public final class logoffSistema_jsp extends org.apache.jasper.runtime.HttpJspBa
             try {
                 Mensagens msn = new Mensagens();
                 session.setAttribute("USU_AUTENTICADO", "");
-                session.setAttribute("ID_USU_LOGADO", "0");  
+                session.setAttribute("ID_USU_LOGADO", "0");
+                session.setAttribute("FACHADA", "");
 
       out.write("\r\n");
       out.write("<html>\r\n");
@@ -83,8 +83,8 @@ public final class logoffSistema_jsp extends org.apache.jasper.runtime.HttpJspBa
         _jspx_page_context.forward("index.jsp");
         return;
       }
-      out.write('\r');
-      out.write('\n');
+      out.write("\r\n");
+      out.write("        ");
 
 } catch (Exception e) {
     String erro = "Erro Localizado ao processar dados.<br><a href='index.jsp'>Tentar novamente</a>";

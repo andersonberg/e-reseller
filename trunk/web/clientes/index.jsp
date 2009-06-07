@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="util.Mensagens,cliente.*,java.util.*" %>
+<%@ page import="util.Mensagens,cliente.Cliente,fachada.Fachada,java.util.*" %>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -12,11 +12,8 @@
     <jsp:param name="erro" value="<%=erro%>"/>
 </jsp:forward>    
 <% }else{
-
-
-            RepositorioClientes repCliente = new RepositorioClientesMySQL();
-            CadastroClientes cadCliente = new CadastroClientes(repCliente);
-            Collection clientes = cadCliente.procurarClientes();
+            Fachada fachada = (Fachada) session.getAttribute("FACHADA");
+            Collection clientes = fachada.procurarClientes();
             Iterator iClientes = clientes.iterator();
 %>
 

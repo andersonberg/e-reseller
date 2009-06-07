@@ -67,7 +67,7 @@ public class RepositorioProdutosMySQL implements RepositorioProdutos {
                     + "id_usu='" + produto.getId_usu() + "' " 
                     + " WHERE id_prod='" + produto.getId_prod()+ "'";
             stmt = gerenciador.getConnection().createStatement();
-            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+           // query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
             int i = stmt.executeUpdate(query);
             if (i == 0) {
                 throw new ProdutoInexistenteException();
@@ -103,11 +103,11 @@ public class RepositorioProdutosMySQL implements RepositorioProdutos {
                     + produto.getId_usu() +"')";
 
             stmt = gerenciador.getConnection().createStatement();
-            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
-            int i = stmt.executeUpdate(query);
+           // query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+            stmt.executeUpdate(query);
             
             query = "SELECT id_prod FROM produto_prod order by id_prod desc limit 1";
-            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+            //query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
             rs = stmt.executeQuery(query);
              while (rs.next()) {
                  retorno = rs.getInt("id_prod");
@@ -175,7 +175,8 @@ public class RepositorioProdutosMySQL implements RepositorioProdutos {
         try {
             String query = "DELETE FROM produto_prod WHERE id_prod= " + produto.getId_prod();
             stmt = gerenciador.getConnection().createStatement();
-            int i = stmt.executeUpdate(query);
+            stmt.executeUpdate(query);
+            resp=true;
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);

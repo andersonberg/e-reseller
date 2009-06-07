@@ -69,8 +69,8 @@ public class RepositorioVendasMySQL implements RepositorioVendas {
                     + "'" + venda.getPrazo_ven() + "', " + "'" + venda.getId_usu() + "')";
 
             stmt = gerenciador.getConnection().createStatement();
-            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
-            int i = stmt.executeUpdate(query);
+            //query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+            stmt.executeUpdate(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);
@@ -187,8 +187,8 @@ public class RepositorioVendasMySQL implements RepositorioVendas {
         try {
             String query = "DELETE FROM venda_ven WHERE id_ven= " + venda.getId_ven();
             stmt = gerenciador.getConnection().createStatement();
-            int i = stmt.executeUpdate(query);
-            resp = true;
+            stmt.executeUpdate(query);
+            resp=true;
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);

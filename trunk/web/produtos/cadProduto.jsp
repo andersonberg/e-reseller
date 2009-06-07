@@ -1,5 +1,5 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="util.Mensagens,produto.*,java.util.*" %>
+<%@ page import="util.Mensagens,produto.Produto,fachada.Fachada,java.util.*" %>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -13,15 +13,14 @@
 </jsp:forward>    
 <% }else{
 String codigoProd = request.getParameter("id").toString();
+Fachada fachada = (Fachada) session.getAttribute("FACHADA");
 //DADOS DE PRODUTO
-RepositorioProdutos repProd = new RepositorioProdutosMySQL();
-CadastroProdutos cadProd = new CadastroProdutos(repProd);
 Produto produtoManutencao = null;
 try{
 if (codigoProd.equals("0")){
     produtoManutencao = new Produto(0, "","","","","", 0);
 }else{
-    produtoManutencao = cadProd.procurar(Integer.parseInt(codigoProd));
+    produtoManutencao = fachada.procurarProduto(Integer.parseInt(codigoProd));
 }}catch(Exception e){
     
 }

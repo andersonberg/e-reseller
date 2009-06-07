@@ -1,5 +1,5 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="util.Mensagens,usuario.*,cliente.*,java.util.*" %>
+<%@ page import="util.Mensagens,usuario.Usuario,cliente.Cliente,fachada.Fachada,java.util.*" %>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -14,16 +14,13 @@
 <% }else{
 //VARIÁVEL RECUPERADA
 String codigoCli = request.getParameter("id").toString();
+Fachada fachada = (Fachada) session.getAttribute("FACHADA");
 //DADOS CLIENTE
-RepositorioClientes repCliente = new RepositorioClientesMySQL();
-CadastroClientes cadCliente = new CadastroClientes(repCliente);
-Cliente cliente = cadCliente.procurar(Integer.parseInt(codigoCli));
+Cliente cliente = fachada.procurarCliente(Integer.parseInt(codigoCli));
 //DADOS USUARIO
-RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
-CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
 Usuario usuarioManutencao = null;
 try{
-    usuarioManutencao = cadUsuario.procurar(Integer.parseInt(codigoCli),2);
+    usuarioManutencao = fachada.procurarUsuario(Integer.parseInt(codigoCli),2);
 }catch(Exception e){
     usuarioManutencao = new Usuario(0,"","","",Integer.parseInt(codigoCli),"A");
 }

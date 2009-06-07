@@ -4,7 +4,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import promocao.*;
+import promocao.Promocao;
+import fachada.Fachada;
 import produto.exceptions.*;
 
 public final class processaManutencaoPromocao_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -71,16 +72,15 @@ public final class processaManutencaoPromocao_jsp extends org.apache.jasper.runt
 }else{
             try {
                 Mensagens msn = new Mensagens();
+                Fachada fachada = (Fachada) session.getAttribute("FACHADA");
                 String codigoProduto = (String) request.getParameter("codigoProduto").toString();
                 String descricao = (String) request.getParameter("edtNome").toString();
                 String desconto = (String) request.getParameter("edtDesconto").toString();
                 String usuario =(String) session.getAttribute("ID_USU_LOGADO").toString();
-                RepositorioPromocoes repPro = new RepositorioPromocoesMySQL();
-                CadastroPromocoes cadPro = new CadastroPromocoes(repPro);
                 Promocao promocao = null;
                 promocao = new Promocao(0,Integer.parseInt(codigoProduto), descricao,Integer.parseInt(desconto), Integer.parseInt(usuario));
                 String informacao = null;
-                cadPro.inserir(promocao);
+                fachada.inserirPromocao(promocao);
                 informacao = "Promoção <strong>cadastrada</strong> com sucesso.";
                 
 

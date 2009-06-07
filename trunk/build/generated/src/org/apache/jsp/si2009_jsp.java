@@ -62,6 +62,7 @@ public final class si2009_jsp extends org.apache.jasper.runtime.HttpJspBase
             Mensagens msn = new Mensagens();
             session.setAttribute("USU_AUTENTICADO", "");
             session.setAttribute("ID_USU_LOGADO", "0");
+            session.setAttribute("FACHADA", "");
 
       out.write("\r\n");
       out.write("<html><head>\r\n");
@@ -78,7 +79,7 @@ public final class si2009_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                    </td>\r\n");
       out.write("                </tr>\r\n");
       out.write("                <tr>\r\n");
-      out.write("                    <td height=\"88\" colspan=\"2\" align=\"center\" class=\"sub_titulo\"><p><img src=\"img/logo_fornecedor.png\"></p>                    \r\n");
+      out.write("                    <td height=\"88\" colspan=\"2\" align=\"center\" class=\"sub_titulo\"><p><img src=\"img/logo_fornecedor.png\"><br><img src=\"img/resseler.JPG\"></p>                    \r\n");
       out.write("                        <p>O <strong>E-Reseller</strong> propõe-se a  automatizar os serviços oferecidos pelo<br>sistema de revenda de modo a, através  de um w<em>ebservice</em>, prover informações<br>e comunicação entre a solicitações realizadas garantindo uma<br>liberação de  produtos para o sistema de transporte de modo eficiente.</p>\r\n");
       out.write("                        <p><br>\r\n");
       out.write("                    </p></td>\r\n");

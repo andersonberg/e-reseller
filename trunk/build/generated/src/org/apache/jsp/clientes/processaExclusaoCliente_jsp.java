@@ -4,10 +4,11 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import cliente.*;
-import usuario.*;
+import cliente.Cliente;
+import usuario.Usuario;
+import fachada.Fachada;
 import usuario.exceptions.*;
-import venda.*;
+import venda.Venda;
 import venda.exceptions.*;
 
 public final class processaExclusaoCliente_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -75,13 +76,11 @@ public final class processaExclusaoCliente_jsp extends org.apache.jasper.runtime
     try {
         Mensagens msn = new Mensagens();
         String codigoCliente = request.getParameter("id").toString();
-        
+        Fachada fachada = (Fachada) session.getAttribute("FACHADA");
                //DADOS DE VENDA
-        RepositorioVendas repVenda = new RepositorioVendasMySQL();
-        CadastroVendas cadVenda = new CadastroVendas(repVenda);
         try {
-            cadVenda.procurar(Integer.parseInt(codigoCliente), 2);
-            String erro = "Não é possível excluir produto. Registro de Venda Localizado.<br><a href='index.jsp'>Tentar novamente</a>";
+            fachada.procurarVenda(Integer.parseInt(codigoCliente), 2);
+            String erro = "Não é possível excluir este cliente. Registro de Venda Localizado.<br><a href='index.jsp'>Tentar novamente</a>";
 
       out.write('\r');
       out.write('\n');
@@ -98,15 +97,11 @@ public final class processaExclusaoCliente_jsp extends org.apache.jasper.runtime
         //Não localizado PRODUTO permite a exclusão
         }
         //DADOS CLIENTE
-        RepositorioClientes repCliente = new RepositorioClientesMySQL();
-        CadastroClientes cadCliente = new CadastroClientes(repCliente);
-        Cliente cliente = cadCliente.procurar(Integer.parseInt(codigoCliente));
-        cadCliente.remover(cliente);
+        Cliente cliente = fachada.procurarCliente(Integer.parseInt(codigoCliente));
+        fachada.removerCliente(cliente);
         //DADOS USUARIO
-        RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
-        CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
         try {
-            cadUsuario.remover(Integer.parseInt(codigoCliente));
+            fachada.removerClienteUsuario(Integer.parseInt(codigoCliente));
         } catch (Exception e) {
         }
 

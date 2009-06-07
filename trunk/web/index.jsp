@@ -4,6 +4,12 @@
     Author     : Ailton Souza
 --%>
 <html>
+    <%
+        //Liberando variáveis para não liberar acesso ao sistema
+            session.setAttribute("USU_AUTENTICADO", "");
+            session.setAttribute("ID_USU_LOGADO", "0");
+            session.setAttribute("FACHADA", "");
+%>
 <head>
 <title>E-Reseller®</title>
 </head>

@@ -4,7 +4,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import usuario.*;
+import usuario.Usuario;
+import fachada.Fachada;
 import usuario.exceptions.*;
 
 public final class processaManutencaoUsuario_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -71,20 +72,19 @@ public final class processaManutencaoUsuario_jsp extends org.apache.jasper.runti
 }else{
             try {
                 Mensagens msn = new Mensagens();
+                Fachada fachada = (Fachada) session.getAttribute("FACHADA");
                 String codigoTemporario = (String) request.getParameter("id").toString();
                 String nome = (String) request.getParameter("edtNome").toString();
                 String login =(String) request.getParameter("edtLogin").toString();
                 String senha =(String) request.getParameter("edtSenha").toString();
                 String status =(String) request.getParameter("status").toString();
-                RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
-                CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
                 Usuario usuario = new Usuario(Integer.parseInt(codigoTemporario), nome, login, senha,0, status);
                 String informacao = null;
                 if (codigoTemporario.equals("0")){
-                    cadUsuario.inserir(usuario);
+                    fachada.inserirUsuario(usuario);
                     informacao = "Usuário <strong>cadastrado</strong> com sucesso.";
                 }else{
-                    cadUsuario.atualizar(usuario);
+                    fachada.atualizarUsuario(usuario);
                     informacao = "Usuário <strong>alterado</strong> com sucesso.";
                 }
                 

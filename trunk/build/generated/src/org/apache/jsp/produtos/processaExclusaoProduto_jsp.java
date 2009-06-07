@@ -4,13 +4,14 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import produto.*;
-import estoque.*;
+import produto.Produto;
+import estoque.Estoque;
 import estoque.exceptions.*;
 import promocao.exceptions.*;
 import venda.exceptions.*;
-import venda.*;
-import promocao.*;
+import venda.Venda;
+import promocao.Promocao;
+import fachada.Fachada;
 
 public final class processaExclusaoProduto_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
@@ -77,12 +78,10 @@ public final class processaExclusaoProduto_jsp extends org.apache.jasper.runtime
     try {
         Mensagens msn = new Mensagens();
         String codigoProduto = request.getParameter("id").toString();
-
+        Fachada fachada = (Fachada) session.getAttribute("FACHADA");
         //DADOS DE VENDA
-        RepositorioVendas repVenda = new RepositorioVendasMySQL();
-        CadastroVendas cadVenda = new CadastroVendas(repVenda);
         try {
-            cadVenda.procurar(Integer.parseInt(codigoProduto), 1);
+            fachada.procurarVenda(Integer.parseInt(codigoProduto), 1);
             String erro = "Não é possível excluir produto. Registro de Venda Localizado.<br><a href='index.jsp'>Tentar novamente</a>";
 
       out.write('\r');
@@ -101,29 +100,23 @@ public final class processaExclusaoProduto_jsp extends org.apache.jasper.runtime
         }
 
 //DADOS DE PRODUTO
-    RepositorioProdutos repProduto = new RepositorioProdutosMySQL();
-    CadastroProdutos cadProduto = new CadastroProdutos(repProduto);
-    Produto produto = cadProduto.procurar(Integer.parseInt(codigoProduto));
+    Produto produto = fachada.procurarProduto(Integer.parseInt(codigoProduto));
 
 //DADOS DE ESTOQUE
-    RepositorioEstoques repEstoque = new RepositorioEstoquesMySQL();
-    CadastroEstoques cadEstoque = new CadastroEstoques(repEstoque);
     try {
-        cadEstoque.remover(produto.getId_prod());
+        fachada.removerEstoque(produto.getId_prod());
     } catch (EstoqueInexistenteException e) {
         //Não localizado estoque de produto para exclusão
     }
 
 //DADOS DE PROMOCAO
-    RepositorioPromocoes repPromocao = new RepositorioPromocoesMySQL();
-    CadastroPromocoes cadPromocao = new CadastroPromocoes(repPromocao);
     Promocao promocao = new Promocao(produto.getId_prod());
     try {
-        cadPromocao.remover(promocao);
+        fachada.removerPromocao(promocao);
     } catch (PromocaoInexistenteException e) {
         //Não localizado promocao de produto para exclusão
     }
-    cadProduto.remover(produto);
+    fachada.removerProduto(produto);
 
 
       out.write("\r\n");

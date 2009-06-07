@@ -61,7 +61,7 @@ public class RepositorioClientesMySQL implements RepositorioClientes {
                     + "id_usu='" + cliente.getId_usu() + "' " 
                     + " WHERE id_cli='" + cliente.getId_cli()+ "'";
             stmt = gerenciador.getConnection().createStatement();
-            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+            //query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
             int i = stmt.executeUpdate(query);
             if (i == 0) {
                 throw new ClienteInexistenteException();
@@ -92,8 +92,8 @@ public class RepositorioClientesMySQL implements RepositorioClientes {
                     + cliente.getId_usu() +"')";
 
             stmt = gerenciador.getConnection().createStatement();
-            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
-            int i = stmt.executeUpdate(query);
+            //query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+            stmt.executeUpdate(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);
@@ -152,7 +152,8 @@ public class RepositorioClientesMySQL implements RepositorioClientes {
         try {
             String query = "DELETE FROM cliente_cli WHERE id_cli= " + cliente.getId_cli();
             stmt = gerenciador.getConnection().createStatement();
-            int i = stmt.executeUpdate(query);
+            stmt.executeUpdate(query);
+            resp=true;
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);

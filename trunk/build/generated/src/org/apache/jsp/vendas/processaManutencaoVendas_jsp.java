@@ -4,10 +4,11 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import venda.*;
+import venda.Venda;
 import venda.exceptions.*;
-import estoque.*;
+import estoque.Estoque;
 import estoque.exceptions.*;
+import fachada.Fachada;
 
 public final class processaManutencaoVendas_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
@@ -73,6 +74,7 @@ public final class processaManutencaoVendas_jsp extends org.apache.jasper.runtim
 } else {
     try {
         Mensagens msn = new Mensagens();
+        Fachada fachada = (Fachada) session.getAttribute("FACHADA");
         String codigoProduto = (String) request.getParameter("codigoProduto").toString();
         String quantidade = (String) request.getParameter("edtQuantidade").toString();
         String valor = (String) request.getParameter("edtValor").toString();
@@ -81,14 +83,9 @@ public final class processaManutencaoVendas_jsp extends org.apache.jasper.runtim
 
         valor = valor.replace(",", ".");
         String usuario = (String) session.getAttribute("ID_USU_LOGADO").toString();
-        //DADOS DE VENDA
-        RepositorioVendas repVenda = new RepositorioVendasMySQL();
-        CadastroVendas cadVenda = new CadastroVendas(repVenda);
 
         //DADOS ESTOQUE
-        RepositorioEstoques repEstoque = new RepositorioEstoquesMySQL();
-        CadastroEstoques cadEstoque = new CadastroEstoques(repEstoque);
-        Estoque estoque = cadEstoque.procurar(Integer.parseInt(codigoProduto));
+        Estoque estoque = fachada.procurarEstoqueProduto(Integer.parseInt(codigoProduto));
 
         if (estoque.getQuantidade_est() < Integer.parseInt(quantidade)) {
             String erro = "Estoque não possui quantidade suficiente para realizar venda.<br><a href='index.jsp'>Tentar novamente</a>";
@@ -110,8 +107,8 @@ public final class processaManutencaoVendas_jsp extends org.apache.jasper.runtim
     Venda venda = new Venda(0, Integer.parseInt(codigoProduto), Integer.parseInt(cliente), Integer.parseInt(quantidade), valorTotal, prazo, Integer.parseInt(usuario));
 
     String informacao = null;
-    cadVenda.inserir(venda);
-    cadEstoque.alterarEstoque(Integer.parseInt(codigoProduto), Integer.parseInt(quantidade), 1);
+    fachada.inserirVenda(venda);
+    fachada.alterarEstoque(Integer.parseInt(codigoProduto), Integer.parseInt(quantidade), 1);
     informacao = "Venda <strong>registrada</strong> com sucesso.";
 
 

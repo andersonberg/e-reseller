@@ -4,8 +4,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import promocao.*;
-import produto.*;
+import promocao.Promocao;
+import produto.Produto;
+import fachada.Fachada;
 import java.util.*;
 
 public final class listarPromocao_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -73,15 +74,12 @@ public final class listarPromocao_jsp extends org.apache.jasper.runtime.HttpJspB
  }else{
 
             String codigoProduto = request.getParameter("id").toString();
+            Fachada fachada = (Fachada) session.getAttribute("FACHADA");
             Promocao promocao = new Promocao(Integer.parseInt(codigoProduto));
-            RepositorioPromocoes repPro = new RepositorioPromocoesMySQL();
-            CadastroPromocoes cadPro = new CadastroPromocoes(repPro);
-            Collection promocoes = cadPro.procurarPromocoes(promocao);
+            Collection promocoes = fachada.procurarPromocoes(promocao);
             Iterator iPromocoes = promocoes.iterator();
-            
-            RepositorioProdutos repProd = new RepositorioProdutosMySQL();
-            CadastroProdutos cadProd = new CadastroProdutos(repProd);
-            Produto produto = cadProd.procurar(Integer.parseInt(codigoProduto));
+
+            Produto produto = fachada.procurarProduto(Integer.parseInt(codigoProduto));
 
       out.write("\r\n");
       out.write("\r\n");

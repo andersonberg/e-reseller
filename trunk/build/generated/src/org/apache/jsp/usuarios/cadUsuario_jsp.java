@@ -4,7 +4,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import usuario.*;
+import usuario.Usuario;
+import fachada.Fachada;
 import java.util.*;
 
 public final class cadUsuario_jsp extends org.apache.jasper.runtime.HttpJspBase
@@ -69,52 +70,51 @@ public final class cadUsuario_jsp extends org.apache.jasper.runtime.HttpJspBase
         return;
       }
       out.write("    \r\n");
- }else{
-String codigoUsu = request.getParameter("id").toString();
-RepositorioUsuarios repUsu = new RepositorioUsuariosMySQL();
-CadastroUsuarios cadUsu = new CadastroUsuarios(repUsu);
-Usuario usuarioManutencao = null;
-try{
-if (codigoUsu.equals("0")){
-    usuarioManutencao = new Usuario(0, "", "", "",0, "A");
-}else{
-    usuarioManutencao = cadUsu.procurar(Integer.parseInt(codigoUsu),1);
-}}catch(Exception e){
-    
-}
+ } else {
+    Fachada fachada = (Fachada) session.getAttribute("FACHADA");
+    String codigoUsu = request.getParameter("id").toString();
+    Usuario usuarioManutencao = null;
+    try {
+        if (codigoUsu.equals("0")) {
+            usuarioManutencao = new Usuario(0, "", "", "", 0, "A");
+        } else {
+            usuarioManutencao = fachada.procurarUsuario(Integer.parseInt(codigoUsu), 1);
+        }
+    } catch (Exception e) {
+    }
 
       out.write("\r\n");
       out.write("<script language=\"javascript\">\r\n");
-      out.write("function validar(){\r\n");
-      out.write("\tfor (i=0;i<document.frmCadastrarUsuario.elements.length-1;i++){\r\n");
-      out.write("\t\tif ((document.frmCadastrarUsuario.elements[i].value == '')&&(document.frmCadastrarUsuario.elements[i].type == 'text')){\r\n");
-      out.write("\t\t\talert('Informar todos os campos obrigatórios.');\r\n");
-      out.write("\t\t\tdocument.frmCadastrarUsuario.elements[i].focus();\r\n");
-      out.write("\t\t\treturn false;\r\n");
-      out.write("\t\t}\r\n");
-      out.write("                if ((document.frmCadastrarUsuario.elements[i].value == '')&&(document.frmCadastrarUsuario.elements[i].type == 'password')){\r\n");
-      out.write("\t\t\talert('Informar todos os campos obrigatórios.');\r\n");
-      out.write("\t\t\tdocument.frmCadastrarUsuario.elements[i].focus();\r\n");
-      out.write("\t\t\treturn false;\r\n");
-      out.write("\t\t}\r\n");
-      out.write("\t}\r\n");
-      out.write("\treturn true;\r\n");
-      out.write("}\r\n");
+      out.write("    function validar(){\r\n");
+      out.write("        for (i=0;i<document.frmCadastrarUsuario.elements.length-1;i++){\r\n");
+      out.write("            if ((document.frmCadastrarUsuario.elements[i].value == '')&&(document.frmCadastrarUsuario.elements[i].type == 'text')){\r\n");
+      out.write("                alert('Informar todos os campos obrigatórios.');\r\n");
+      out.write("                document.frmCadastrarUsuario.elements[i].focus();\r\n");
+      out.write("                return false;\r\n");
+      out.write("            }\r\n");
+      out.write("            if ((document.frmCadastrarUsuario.elements[i].value == '')&&(document.frmCadastrarUsuario.elements[i].type == 'password')){\r\n");
+      out.write("                alert('Informar todos os campos obrigatórios.');\r\n");
+      out.write("                document.frmCadastrarUsuario.elements[i].focus();\r\n");
+      out.write("                return false;\r\n");
+      out.write("            }\r\n");
+      out.write("        }\r\n");
+      out.write("        return true;\r\n");
+      out.write("    }\r\n");
       out.write("\r\n");
-      out.write("function setarCombo(objCombo,valorProcurado){\r\n");
-      out.write("\tindice = 0;\r\n");
-      out.write("\t//se for em branco ou nulo, nao entrar no loop.\r\n");
-      out.write("\tif (valorProcurado == '' || valorProcurado == 'null' ) {\r\n");
-      out.write("\t\treturn false;\r\n");
-      out.write("\t}\r\n");
-      out.write("\twhile(indice < objCombo.length) {\r\n");
-      out.write("\t\tif (objCombo.options[indice].value == valorProcurado ) {\r\n");
-      out.write("\t\t\tobjCombo.options[indice].selected = true ;\r\n");
-      out.write("\t\t\tbreak;\r\n");
-      out.write("\t\t}\r\n");
-      out.write("\t\tindice = indice + 1;\r\n");
-      out.write("\t}\r\n");
-      out.write("}\r\n");
+      out.write("    function setarCombo(objCombo,valorProcurado){\r\n");
+      out.write("        indice = 0;\r\n");
+      out.write("        //se for em branco ou nulo, nao entrar no loop.\r\n");
+      out.write("        if (valorProcurado == '' || valorProcurado == 'null' ) {\r\n");
+      out.write("            return false;\r\n");
+      out.write("        }\r\n");
+      out.write("        while(indice < objCombo.length) {\r\n");
+      out.write("            if (objCombo.options[indice].value == valorProcurado ) {\r\n");
+      out.write("                objCombo.options[indice].selected = true ;\r\n");
+      out.write("                break;\r\n");
+      out.write("            }\r\n");
+      out.write("            indice = indice + 1;\r\n");
+      out.write("        }\r\n");
+      out.write("    }\r\n");
       out.write("</script>\r\n");
       out.write("<html>\r\n");
       out.write("    <head>\r\n");
@@ -124,54 +124,54 @@ if (codigoUsu.equals("0")){
       out.write("</title>\r\n");
       out.write("    </head>\r\n");
       out.write("    <body>\r\n");
-      out.write("              <center>\r\n");
-      out.write("                <table>\r\n");
-      out.write("                    <tr><td width=\"417\" align=\"left\"><br>\r\n");
-      out.write("                    <br><br><br><br><br><br><br><br><br><a href=\"../sistema.jsp\">Home</a></td></tr>\r\n");
-      out.write("                    <tr>\r\n");
-      out.write("                        <td align=\"center\" class=\"titulo_topo\">Cadastro de Usuários</td>\r\n");
-      out.write("                    </tr>\r\n");
-      out.write("                    <tr><td>\r\n");
-      out.write("                            <div align=\"left\"></div>\r\n");
-      out.write("                <br><form name=\"frmCadastrarUsuario\" method=\"post\" action=\"processaManutencaoUsuario.jsp\">\r\n");
+      out.write("        <center>\r\n");
+      out.write("            <table>\r\n");
+      out.write("                <tr><td width=\"417\" align=\"left\"><br>\r\n");
+      out.write("                <br><br><br><br><br><br><br><br><br><a href=\"../sistema.jsp\">Home</a></td></tr>\r\n");
+      out.write("                <tr>\r\n");
+      out.write("                    <td align=\"center\" class=\"titulo_topo\">Cadastro de Usuários</td>\r\n");
+      out.write("                </tr>\r\n");
+      out.write("                <tr><td>\r\n");
+      out.write("                        <div align=\"left\"></div>\r\n");
+      out.write("                        <br><form name=\"frmCadastrarUsuario\" method=\"post\" action=\"processaManutencaoUsuario.jsp\">\r\n");
       out.write("                            <table width=\"417\" border=\"0\" class=\"btabela_grande\">\r\n");
       out.write("                                <tr><td width=\"110\">Nome Completo:</td>\r\n");
-      out.write("                                  <td width=\"297\">\r\n");
-      out.write("                                  <input type=\"text\" name=\"edtNome\" maxlength=\"50\" value=\"");
+      out.write("                                    <td width=\"297\">\r\n");
+      out.write("                                    <input type=\"text\" name=\"edtNome\" maxlength=\"50\" value=\"");
       out.print(usuarioManutencao.getNome_usu());
       out.write("\"></td>\r\n");
-      out.write("                                  <input type=\"hidden\" name=\"id\" value=\"");
+      out.write("                                    <input type=\"hidden\" name=\"id\" value=\"");
       out.print(usuarioManutencao.getId_usu());
       out.write("\">\r\n");
       out.write("                                </tr>\r\n");
-      out.write("                                                             <tr><td>Login:</td><td> <input type=\"text\" name=\"edtLogin\" maxlength=\"10\" value=\"");
+      out.write("                                <tr><td>Login:</td><td> <input type=\"text\" name=\"edtLogin\" maxlength=\"10\" value=\"");
       out.print(usuarioManutencao.getLogin_usu());
       out.write("\"></td>\r\n");
-      out.write("                                                             </tr>\r\n");
-      out.write("                                                             <tr><td>Senha:</td><td> <input type=\"password\" name=\"edtSenha\" maxlength=\"10\" value=\"");
+      out.write("                                </tr>\r\n");
+      out.write("                                <tr><td>Senha:</td><td> <input type=\"password\" name=\"edtSenha\" maxlength=\"10\" value=\"");
       out.print(usuarioManutencao.getSenha_usu());
       out.write("\"></td>\r\n");
-      out.write("                                                             </tr>\r\n");
-      out.write("                                                             <tr><td>Status:</td><td><select name=status>\r\n");
-      out.write("                                                               <option value=\"A\">Ativo</option>\r\n");
-      out.write("                                                               <option value=\"I\">Inativo</option>\r\n");
-      out.write("                                                             </select>\r\n");
-      out.write("                                                             <script>setarCombo(document.frmCadastrarUsuario.status,'");
+      out.write("                                </tr>\r\n");
+      out.write("                                <tr><td>Status:</td><td><select name=status>\r\n");
+      out.write("                                            <option value=\"A\">Ativo</option>\r\n");
+      out.write("                                            <option value=\"I\">Inativo</option>\r\n");
+      out.write("                                        </select>\r\n");
+      out.write("                                        <script>setarCombo(document.frmCadastrarUsuario.status,'");
       out.print(usuarioManutencao.getStatus_usu());
       out.write("')</script>\r\n");
-      out.write("                                                             </td>\r\n");
-      out.write("                                                             </tr>\r\n");
-      out.write("                                                             <tr><td colspan=\"2\">&nbsp;</td>\r\n");
-      out.write("                                                             </tr>\r\n");
-      out.write("                                                             <tr><td></td><td><input type=\"submit\" name=\"confirmarInclusao\" value=\"Confirmar\" onClick=\"return validar();\">&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelar\" value=\"Cancelar\" onClick=\"javascript:location.href='index.jsp'\"></td>\r\n");
-      out.write("                                                             </tr>\r\n");
-      out.write("                           </table></form> \r\n");
-      out.write("                      <br><br><br>\r\n");
-      out.write("                    </td></tr>\r\n");
-      out.write("                    <tr><td align=\"center\">");
+      out.write("                                    </td>\r\n");
+      out.write("                                </tr>\r\n");
+      out.write("                                <tr><td colspan=\"2\">&nbsp;</td>\r\n");
+      out.write("                                </tr>\r\n");
+      out.write("                                <tr><td></td><td><input type=\"submit\" name=\"confirmarInclusao\" value=\"Confirmar\" onClick=\"return validar();\">&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelar\" value=\"Cancelar\" onClick=\"javascript:location.href='index.jsp'\"></td>\r\n");
+      out.write("                                </tr>\r\n");
+      out.write("                        </table></form> \r\n");
+      out.write("                        <br><br><br>\r\n");
+      out.write("                </td></tr>\r\n");
+      out.write("                <tr><td align=\"center\">");
       out.print(msn.getMn_Rodape_Site());
       out.write("</td></tr>\r\n");
-      out.write("                </table>\r\n");
+      out.write("            </table>\r\n");
       out.write("        </center>   \r\n");
       out.write("    </body>\r\n");
       out.write("</html>");

@@ -4,8 +4,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import util.Mensagens;
-import produto.*;
-import estoque.*;
+import produto.Produto;
+import estoque.Estoque;
+import fachada.Fachada;
 import java.util.*;
 import java.text.DecimalFormat;
 
@@ -73,15 +74,12 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("    \r\n");
  } else {
 DecimalFormat vf = new DecimalFormat("0.00"); 
+Fachada fachada = (Fachada) session.getAttribute("FACHADA");
 //DADOS DE PRODUTO
-    RepositorioProdutos repProduto = new RepositorioProdutosMySQL();
-    CadastroProdutos cadProduto = new CadastroProdutos(repProduto);
-    Collection produtos = cadProduto.procurarProdutos();
+    Collection produtos = fachada.procurarProdutos();
     Iterator iProdutos = produtos.iterator();
 
 //DADOS DE ESTOQUE
-    RepositorioEstoques repEstoque = new RepositorioEstoquesMySQL();
-    CadastroEstoques cadEstoque = new CadastroEstoques(repEstoque);
     Estoque estoque = null;
 
       out.write("\r\n");
@@ -166,7 +164,7 @@ DecimalFormat vf = new DecimalFormat("0.00");
       out.write("                                            <strong>");
 
                                             try{    
-                                            estoque = cadEstoque.procurar(produto.getId_prod());
+                                            estoque = fachada.procurarEstoqueProduto(produto.getId_prod());
                                             String valorFormatado = vf.format(estoque.getValor_prod_est());
                                             
       out.write("<a href=\"javascript:Redirecionar('cadEstoque.jsp?id=");
@@ -189,7 +187,7 @@ DecimalFormat vf = new DecimalFormat("0.00");
       out.write("                                            <strong>");
 
                                             try{    
-                                            estoque = cadEstoque.procurar(produto.getId_prod());
+                                            estoque = fachada.procurarEstoqueProduto(produto.getId_prod());
                                             
       out.write("<a href=\"javascript:Redirecionar('cadEstoque.jsp?id=");
       out.print( estoque.getId_prod());
