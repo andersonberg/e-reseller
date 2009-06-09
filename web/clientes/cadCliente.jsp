@@ -1,5 +1,5 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="util.Mensagens,cliente.Cliente, fachada.Fachada,java.util.*" %>
+<%@ page import="util.Mensagens,cliente.*,java.util.*" %>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -13,13 +13,14 @@
 </jsp:forward>    
 <% }else{
 String codigoCliente = request.getParameter("id").toString();
-Fachada fachada = (Fachada) session.getAttribute("FACHADA");
+RepositorioClientes repCliente = new RepositorioClientesMySQL();
+CadastroClientes cadCliente = new CadastroClientes(repCliente);
 Cliente clienteManutencao = null;
 try{
 if (codigoCliente.equals("0")){
     clienteManutencao = new Cliente(0, "","", 0);
 }else{
-    clienteManutencao = fachada.procurarCliente(Integer.parseInt(codigoCliente));
+    clienteManutencao = cadCliente.procurar(Integer.parseInt(codigoCliente));
 }}catch(Exception e){
     
 }

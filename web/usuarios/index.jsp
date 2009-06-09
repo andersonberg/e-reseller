@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="util.Mensagens,usuario.Usuario,cliente.Cliente,fachada.Fachada,java.util.*" %>
+<%@ page import="util.Mensagens,usuario.*,cliente.*,java.util.*" %>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -12,15 +12,19 @@
     <jsp:param name="erro" value="<%=erro%>"/>
 </jsp:forward>    
 <% } else {
-    Fachada fachada = (Fachada) session.getAttribute("FACHADA");
+
 //DADOS USUARIO
-    Collection usuarios = fachada.procurarUsuarios();
+    RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
+    CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
+    Collection usuarios = cadUsuario.procurarUsuarios();
     Iterator iUsuarios = usuarios.iterator();
 
 //DADOS CLIENTE
+    RepositorioClientes repCliente = new RepositorioClientesMySQL();
+    CadastroClientes cadCliente = new CadastroClientes(repCliente);
     Cliente cliente = null;
-
-    String nomeCliente = "";
+    
+    String nomeCliente ="";
 %>
 
 <SCRIPT language=JavaScript>
@@ -70,22 +74,22 @@
                                 %>
                                 <tr>
                                     <td class="titulo"><%=usuario.getNome_usu()%>
-                                        <%
-                                        if (usuario.getId_cli() > 0) {
-                                            cliente = fachada.procurarCliente(usuario.getId_cli());
-                                            nomeCliente = "(" + cliente.getNome_cli() + ")";
-                                        } else {
-                                            nomeCliente = "";
-                                        }%><i><font color="#FF0000"><%=nomeCliente%></font></i>                                    
-                                    </td>
+<%
+if (usuario.getId_cli()>0){
+    cliente = cadCliente.procurar(usuario.getId_cli());
+    nomeCliente = "("+cliente.getNome_cli()+")";
+}else{
+     nomeCliente = ""; 
+}%><i><font color="#FF0000"><%=nomeCliente%></font></i>                                    
+</td>
                                     <td><div align="center">
                                             <input type="image" src="../img/restore.png" name="btnEditar" value="Editar" onClick="Redirecionar('cadUsuario.jsp?id=<%=usuario.getId_usu()%>')">
                                     </div></td>
                                     <td>
                                         <div align="center">
-                                            <%if (usuario.getStatus_usu().equals("I")) {%>
+                                            <%if (usuario.getStatus_usu().equals("I")){%>
                                             <input type="image" readonly src="../img/unchanged.png" name="btnExcluir" value="Excluir" >
-                                            <%} else {%>
+                                            <%}else{%>
                                             <input type="image" src="../img/bloq.png" name="btnExcluir" value="Excluir"onClick="Redirecionar_Exclusao('processaExclusaoUsuario.jsp?id=<%= usuario.getId_usu()%>')">
                                             <%}%>
                                     </div></td>

@@ -1,4 +1,4 @@
-<%@page import="util.Mensagens, cliente.Cliente,fachada.Fachada, cliente.exceptions.*" %>
+<%@page import="util.Mensagens, cliente.*, cliente.exceptions.*" %>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <%
@@ -15,14 +15,15 @@
                 String nome = (String) request.getParameter("edtNome").toString();
                 String endereco = (String) request.getParameter("edtEndereco").toString();
                 String usuario =(String) session.getAttribute("ID_USU_LOGADO").toString();
-                Fachada fachada = (Fachada) session.getAttribute("FACHADA");
+                RepositorioClientes repCliente = new RepositorioClientesMySQL();
+                CadastroClientes cadCliente = new CadastroClientes(repCliente);
                 Cliente cliente = new Cliente(Integer.parseInt(codigoTemporario), nome, endereco, Integer.parseInt(usuario));
                 String informacao = null;
                 if (codigoTemporario.equals("0")){
-                    fachada.inserirCliente(cliente);
+                    cadCliente.inserir(cliente);
                     informacao = "Cliente <strong>cadastrado</strong> com sucesso.";
                 }else{
-                    fachada.atualizarCliente(cliente);
+                    cadCliente.atualizar(cliente);
                     informacao = "Cliente <strong>alterado</strong> com sucesso.";
                 }
                 

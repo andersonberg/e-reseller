@@ -1,4 +1,4 @@
-<%@page import="util.Mensagens, venda.Venda, venda.exceptions.*,estoque.Estoque,estoque.exceptions.*,fachada.Fachada" %>
+<%@page import="util.Mensagens, venda.*, venda.exceptions.*,estoque.*,estoque.exceptions.*" %>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <%
@@ -11,7 +11,6 @@
 <%} else {
     try {
         Mensagens msn = new Mensagens();
-        Fachada fachada = (Fachada) session.getAttribute("FACHADA");
         String codigoProduto = (String) request.getParameter("codigoProduto").toString();
         String quantidade = (String) request.getParameter("edtQuantidade").toString();
         String valor = (String) request.getParameter("edtValor").toString();
@@ -20,9 +19,14 @@
 
         valor = valor.replace(",", ".");
         String usuario = (String) session.getAttribute("ID_USU_LOGADO").toString();
+        //DADOS DE VENDA
+        RepositorioVendas repVenda = new RepositorioVendasMySQL();
+        CadastroVendas cadVenda = new CadastroVendas(repVenda);
 
         //DADOS ESTOQUE
-        Estoque estoque = fachada.procurarEstoqueProduto(Integer.parseInt(codigoProduto));
+        RepositorioEstoques repEstoque = new RepositorioEstoquesMySQL();
+        CadastroEstoques cadEstoque = new CadastroEstoques(repEstoque);
+        Estoque estoque = cadEstoque.procurar(Integer.parseInt(codigoProduto));
 
         if (estoque.getQuantidade_est() < Integer.parseInt(quantidade)) {
             String erro = "Estoque não possui quantidade suficiente para realizar venda.<br><a href='index.jsp'>Tentar novamente</a>";
@@ -38,8 +42,8 @@
     Venda venda = new Venda(0, Integer.parseInt(codigoProduto), Integer.parseInt(cliente), Integer.parseInt(quantidade), valorTotal, prazo, Integer.parseInt(usuario));
 
     String informacao = null;
-    fachada.inserirVenda(venda);
-    fachada.alterarEstoque(Integer.parseInt(codigoProduto), Integer.parseInt(quantidade), 1);
+    cadVenda.inserir(venda);
+    cadEstoque.alterarEstoque(Integer.parseInt(codigoProduto), Integer.parseInt(quantidade), 1);
     informacao = "Venda <strong>registrada</strong> com sucesso.";
 
 %>

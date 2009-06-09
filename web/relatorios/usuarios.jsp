@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="util.Mensagens,usuario.Usuario,cliente.Cliente,fachada.Fachada,java.util.*" %>
+<%@ page import="util.Mensagens,usuario.*,cliente.*,java.util.*" %>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -12,15 +12,19 @@
     <jsp:param name="erro" value="<%=erro%>"/>
 </jsp:forward>    
 <% } else {
-    Fachada fachada = (Fachada) session.getAttribute("FACHADA");
+
 //DADOS USUARIO
-    Collection usuarios = fachada.procurarUsuarios();
+    RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
+    CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
+    Collection usuarios = cadUsuario.procurarUsuarios();
     Iterator iUsuarios = usuarios.iterator();
 
 //DADOS CLIENTE
+    RepositorioClientes repCliente = new RepositorioClientesMySQL();
+    CadastroClientes cadCliente = new CadastroClientes(repCliente);
     Cliente cliente = null;
-
-    String nomeCliente = "";
+    
+    String nomeCliente ="";
 %>
 
 <SCRIPT language=JavaScript>
@@ -50,10 +54,10 @@
                     <br><br><br><br><br><br><br><br><br><a href="../sistema.jsp">Home</a></td></tr>
                     <tr>
                         <td align="center" class="titulo_topo">Usuários Cadastrados</td>
-                    </tr>
+                  </tr>
                     <tr><td>
                             
-                            <br>
+          <br>
                             <table width="417" border="0" class="btabela_relatorio">
                                 <tr>
                                     <th width="266" scope="col" class="btabela_relatorio"><div align="left" class="titulo_topo">Nome</div></th>
@@ -68,22 +72,20 @@
                                 %>
                                 <tr>
                                     <td class="titulo"><%=usuario.getNome_usu()%>
-                                        <%
-                                        if (usuario.getId_cli() > 0) {
-                                            cliente = fachada.procurarCliente(usuario.getId_cli());
-                                            nomeCliente = "(" + cliente.getNome_cli() + ")";
-                                        } else {
-                                            nomeCliente = "";
-                                        }%><i><font color="#FF0000"><%=nomeCliente%></font></i>                                    
-                                    </td>
+<%
+if (usuario.getId_cli()>0){
+    cliente = cadCliente.procurar(usuario.getId_cli());
+    nomeCliente = "("+cliente.getNome_cli()+")";
+}else{
+     nomeCliente = ""; 
+}%><i><font color="#FF0000"><%=nomeCliente%></font></i>                                    
+</td>
                                     <td><div align="center"><%=usuario.getLogin_usu()%></div></td>
                                     <td>
                                         <div align="center"><% String status = "";
-                                        if (usuario.getStatus_usu().equals("A")) {
-                                            status = "ATIVO";
-                                        } else {
-                                            status = "INATIVO";
-                                        }%><%=status%></div></td>
+                                    if (usuario.getStatus_usu().equals("A")){
+                                        status = "ATIVO";
+                                    }else{status = "INATIVO";}%><%=status%></div></td>
                                 </tr>
                                 
                                 <%
@@ -97,18 +99,18 @@
                             </table>
                             <div align="center"><br>
                                 <br>
-                                <input type="button" value="Voltar" onClick="javascript:location.href='index.jsp'">
-                                &nbsp;&nbsp;&nbsp;
-                                <input type="button" value="Imprimir" onClick="javascript:window.print()">
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                    </div></td></tr>
+                              <input type="button" value="Voltar" onClick="javascript:location.href='index.jsp'">
+                              &nbsp;&nbsp;&nbsp;
+                              <input type="button" value="Imprimir" onClick="javascript:window.print()">
+                              <br>
+                              <br>
+                              <br>
+                              <br>
+                              <br>
+                              <br>
+                              <br>
+                              <br>
+                                    </div></td></tr>
                     <tr><td align="center"><%=msn.getMn_Rodape_Site()%></td></tr>
                 </table>
         </center> </form>   

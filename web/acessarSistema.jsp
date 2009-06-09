@@ -1,5 +1,5 @@
 
-<%@page import="util.Mensagens, usuario.Usuario, fachada.*, controladores.*" %>
+<%@page import="util.Mensagens, usuario.*" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page session="true"%>
 <link rel="stylesheet" type="text/css" href="estilo/si2009.css"/>
@@ -38,28 +38,45 @@
         </jsp:forward>
         <%
         } else {
-            Fachada fachada;
-            if (session.getAttribute("FACHADA").equals("")) {
-                fachada = new Fachada();
-            } else {
-                fachada = (Fachada) session.getAttribute("FACHADA");
-            }
-            Controladores controladores = new Controladores(fachada);
-            Usuario usuario = controladores.LiberarAcesso(login, senha);
-
-            session.setAttribute("USU_AUTENTICADO", usuario.getLogin_usu());
-            session.setAttribute("ID_USU_LOGADO", usuario.getId_usu());
-            session.setAttribute("FACHADA", fachada);
-        %>
-        <jsp:forward page="sistema.jsp"/>
-        <%
-    }
-} catch (Exception e) {
+            RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
+            CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
+            int codigoUsuarioLogado = cadUsuario.liberarAcesso(login, senha);
+            if (codigoUsuarioLogado > 0) {
+                Usuario usuario = cadUsuario.procurar(codigoUsuarioLogado,1);
+                if (usuario.getId_cli() > 0) {
+                    erro = "Este Usuário não é funcionário do E-reseller para utilizar o sistema.<br><a href='index.jsp'>Tentar novamente</a>";
         %>
         <jsp:forward page="inconsistenciaSistema.jsp">
-            <jsp:param name="erro" value="<%=e.getMessage()%>"/>
+            <jsp:param name="erro" value="<%=erro%>"/>
+        </jsp:forward>     
+        
+        <%
+                } else {
+
+                    session.setAttribute("USU_AUTENTICADO", login);
+                    session.setAttribute("ID_USU_LOGADO", codigoUsuarioLogado);
+        %>
+        <jsp:forward page="sistema.jsp"/>
+        <% }
+            } else {
+                erro = "Usuário não habilitado para utilizar o sistema.<br><a href='index.jsp'>Tentar novamente</a>";
+        %>
+        <jsp:forward page="inconsistenciaSistema.jsp">
+            <jsp:param name="erro" value="<%=erro%>"/>
+        </jsp:forward>     
+        <%
+        }
+    }
+
+} catch (Exception e) {
+    String erro = "Erro Localizado ao processar dados.<br><a href='index.jsp'>Tentar novamente</a>";
+        %>
+        <jsp:forward page="inconsistenciaSistema.jsp">
+            <jsp:param name="erro" value="<%=erro%>"/>
         </jsp:forward> 
-        <%            }
+        <%
+
+            }
         %>
     </body>
 </html>

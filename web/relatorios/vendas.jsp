@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="util.Mensagens,produto.Produto,venda.Venda,cliente.Cliente,fachada.Fachada,java.util.*,java.text.SimpleDateFormat,java.text.DecimalFormat" %>
+<%@ page import="util.Mensagens,produto.*,venda.*,cliente.*,java.util.*,java.text.SimpleDateFormat,java.text.DecimalFormat" %>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -12,12 +12,11 @@
     <jsp:param name="erro" value="<%=erro%>"/>
 </jsp:forward>    
 <% } else {
-    Fachada fachada = (Fachada) session.getAttribute("FACHADA");
     String codigo = request.getParameter("id").toString();
     String relatorio = request.getParameter("tipo").toString();
-    String dtInicial = "";
-    String dtFinal = "";
-    String cli = "";
+    String dtInicial="";
+    String dtFinal="";
+    String cli="";
     if (relatorio.equals("3")) {
         dtInicial = request.getParameter("dtInicial").toString();
         dtFinal = request.getParameter("dtFinal").toString();
@@ -26,17 +25,23 @@
     SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     DecimalFormat vf = new DecimalFormat("0.00");
 //DADOS DE VENDA
+    RepositorioVendas repVenda = new RepositorioVendasMySQL();
+    CadastroVendas cadVenda = new CadastroVendas(repVenda);
     Collection vendas = null;
     if (relatorio.equals("3")) {
-        vendas = fachada.procurarVendas(Integer.parseInt(codigo), Integer.parseInt(cli), dtInicial, dtFinal);
+        vendas = cadVenda.procurarVendas(Integer.parseInt(codigo), Integer.parseInt(cli), dtInicial, dtFinal);
     } else {
-        vendas = fachada.procurarVendas(Integer.parseInt(codigo), Integer.parseInt(relatorio));
+        vendas = cadVenda.procurarVendas(Integer.parseInt(codigo), Integer.parseInt(relatorio));
     }
     Iterator iVendas = vendas.iterator();
 
 //DADOS DE Produto
+    RepositorioProdutos repProduto = new RepositorioProdutosMySQL();
+    CadastroProdutos cadProduto = new CadastroProdutos(repProduto);
     Produto produto = null;
 //DADOS DE CLIENTES
+    RepositorioClientes repCliente = new RepositorioClientesMySQL();
+    CadastroClientes cadCliente = new CadastroClientes(repCliente);
     Cliente cliente = null;
 
 %>
@@ -73,16 +78,16 @@
 
                             %>
                             <tr>
-                                <td ><div align="left"><%produto = fachada.procurarProduto(venda.getId_prod());%><%=produto.getDescricao_prod()%></div></td>
-                                <td><div align="left"><%cliente = fachada.procurarCliente(venda.getId_cli());%><%=cliente.getNome_cli()%></div></td>
+                                <td ><div align="left"><%produto = cadProduto.procurar(venda.getId_prod());%><%=produto.getDescricao_prod()%></div></td>
+                                <td><div align="left"><%cliente = cadCliente.procurar(venda.getId_cli());%><%=cliente.getNome_cli()%></div></td>
                                 <td><div align="center"><%=venda.getQtd_ven()%></div></td>
                                 <td><div align="center">R$ <%=vf.format(venda.getValor_ven())%></div></td>
                                 <td><div align="center"><%=venda.getPrazo_ven()%></div></td>
                                 <td><div align="center"><%=df.format(venda.getDthr_atualizacao())%></div></td>
                             </tr>
                             
-                            <%valorTotal = valorTotal + venda.getValor_ven();
-                                    qtdTotal = qtdTotal + venda.getQtd_ven();
+                            <%valorTotal = valorTotal+venda.getValor_ven();
+                                qtdTotal = qtdTotal+ venda.getQtd_ven();
                                 }
                             %>
                             <tr><td colspan="6" class="titulo"><BR>Valor Total: R$ <strong><%=vf.format(valorTotal)%><br>Quantidade de Produtos vendidos: <strong><%=qtdTotal%></strong></td></tr>
