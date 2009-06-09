@@ -87,7 +87,7 @@ public class RepositorioVendasMySQLTest {
         Collection esperado = new Vector();
         esperado.add(this.venda);
         Collection result = this.repositorioVendas.procurarVendas(id, tipo);
-        assertEquals(esperado.toArray(), result.toArray());
+        assertArrayEquals(esperado.toArray(), result.toArray());
         // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
     }
@@ -108,7 +108,7 @@ public class RepositorioVendasMySQLTest {
         Collection result = instance.procurarVendas(id_prod, id_cli, dtInicial, dtFinal);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
+        fail("The test case is a prototype.");
     }
 
     /**
