@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="util.Mensagens,java.util.*" %>
+<%@ page import="util.Mensagens,usuario.*,cliente.*,java.util.*" %>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -12,6 +12,19 @@
     <jsp:param name="erro" value="<%=erro%>"/>
 </jsp:forward>    
 <% } else {
+
+//DADOS USUARIO
+    RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
+    CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
+    Collection usuarios = cadUsuario.procurarUsuarios();
+    Iterator iUsuarios = usuarios.iterator();
+
+//DADOS CLIENTE
+    RepositorioClientes repCliente = new RepositorioClientesMySQL();
+    CadastroClientes cadCliente = new CadastroClientes(repCliente);
+    Cliente cliente = null;
+    
+    String nomeCliente ="";
 %>
 <html>
     <head>

@@ -1,4 +1,4 @@
-<%@page import="util.Mensagens, usuario.Usuario,fachada.Fachada" %>
+<%@page import="util.Mensagens, usuario.*" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <%
@@ -11,11 +11,12 @@
 <%}else{
             try {
                 Mensagens msn = new Mensagens();
-                Fachada fachada = (Fachada) session.getAttribute("FACHADA");
                 String codigoUsu = request.getParameter("id").toString();
-                Usuario usuario = fachada.procurarUsuario(Integer.parseInt(codigoUsu),1);
+                RepositorioUsuarios repUsuario = new RepositorioUsuariosMySQL();
+                CadastroUsuarios cadUsuario = new CadastroUsuarios(repUsuario);
+                Usuario usuario = cadUsuario.procurar(Integer.parseInt(codigoUsu),1);
                 usuario.setStatus_usu("I");
-                fachada.atualizarUsuario(usuario);
+                cadUsuario.atualizar(usuario);
 %>
 <html>
 <head>

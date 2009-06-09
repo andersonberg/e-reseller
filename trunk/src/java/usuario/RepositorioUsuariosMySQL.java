@@ -63,7 +63,7 @@ public class RepositorioUsuariosMySQL implements RepositorioUsuarios {
         try {
             String query = "UPDATE usuario_usu set " + "nome_usu='" + usuario.getNome_usu() + "', " + "login_usu='" + usuario.getLogin_usu() + "', " + "senha_usu='" + usuario.getSenha_usu() + "', " + "status_usu='" + usuario.getStatus_usu() + "' " + " WHERE id_usu='" + usuario.getId_usu() + "'";
             stmt = gerenciador.getConnection().createStatement();
-            //query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
             int i = stmt.executeUpdate(query);
             if (i == 0) {
                 throw new UsuarioInexistenteException();
@@ -145,8 +145,8 @@ public class RepositorioUsuariosMySQL implements RepositorioUsuarios {
             String query = "INSERT INTO usuario_usu (nome_usu,login_usu,senha_usu,id_cli,status_usu) VALUES( " + "'" + usuario.getNome_usu() + "', " + "'" + usuario.getLogin_usu() + "', " + "'" + usuario.getSenha_usu() + "', " + "'" + usuario.getId_cli() + "', " + "'" + usuario.getStatus_usu() + "')";
 
             stmt = gerenciador.getConnection().createStatement();
-           // query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
-            stmt.executeUpdate(query);
+            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+            int i = stmt.executeUpdate(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);
@@ -206,8 +206,7 @@ public class RepositorioUsuariosMySQL implements RepositorioUsuarios {
         try {
             String query = "DELETE FROM usuario_usu WHERE id_usu= " + usuario.getId_usu();
             stmt = gerenciador.getConnection().createStatement();
-            stmt.executeUpdate(query);
-            resp=true;
+            int i = stmt.executeUpdate(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);
@@ -230,7 +229,7 @@ public class RepositorioUsuariosMySQL implements RepositorioUsuarios {
         try {
             String query = "DELETE FROM usuario_usu WHERE id_cli= " + id_cli;
             stmt = gerenciador.getConnection().createStatement();
-            stmt.executeUpdate(query);
+            int i = stmt.executeUpdate(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);

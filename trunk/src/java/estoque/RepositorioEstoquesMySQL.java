@@ -62,7 +62,7 @@ public class RepositorioEstoquesMySQL implements RepositorioEstoques {
                     + "id_usu='" + estoque.getId_usu() + "' " 
                     + " WHERE id_est='" + estoque.getId_est()+ "'";
             stmt = gerenciador.getConnection().createStatement();
-            //query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
             int i = stmt.executeUpdate(query);
             if (i == 0) {
                 throw new EstoqueInexistenteException();
@@ -94,8 +94,8 @@ public class RepositorioEstoquesMySQL implements RepositorioEstoques {
                     + estoque.getId_usu() +"')";
 
             stmt = gerenciador.getConnection().createStatement();
-           // query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
-            stmt.executeUpdate(query);
+            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+            int i = stmt.executeUpdate(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);
@@ -155,8 +155,8 @@ public class RepositorioEstoquesMySQL implements RepositorioEstoques {
         try {
             String query = "DELETE FROM estoque_est WHERE id_prod= '" + id_prod+"'";
             stmt = gerenciador.getConnection().createStatement();
-            stmt.executeUpdate(query);
-            resp=true;
+            int i = stmt.executeUpdate(query);
+            resp = true;
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);
@@ -185,7 +185,7 @@ public class RepositorioEstoquesMySQL implements RepositorioEstoques {
                     + complemento
                     + " WHERE id_prod='" + id_prod+ "'";
             stmt = gerenciador.getConnection().createStatement();
-            //query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
             int i = stmt.executeUpdate(query);
             if (i == 0) {
                 throw new EstoqueInexistenteException();

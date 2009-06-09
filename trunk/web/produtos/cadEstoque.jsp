@@ -1,5 +1,5 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="util.Mensagens,estoque.Estoque,produto.Produto,fachada.Fachada,java.util.*" %>
+<%@ page import="util.Mensagens,estoque.*,produto.*,java.util.*" %>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -13,11 +13,14 @@
 </jsp:forward>    
 <% }else{
 String codigoProduto = request.getParameter("id").toString();
-Fachada fachada = (Fachada) session.getAttribute("FACHADA");
 //DADOS ESTOQUE
-Estoque estoque = fachada.procurarEstoqueProduto(Integer.parseInt(codigoProduto));
+RepositorioEstoques repEstoque = new RepositorioEstoquesMySQL();
+CadastroEstoques cadEstoque = new CadastroEstoques(repEstoque);
+Estoque estoque = cadEstoque.procurar(Integer.parseInt(codigoProduto));
 //DADOS PRODUTO
-Produto produto = fachada.procurarProduto(Integer.parseInt(codigoProduto));
+RepositorioProdutos repProd = new RepositorioProdutosMySQL();
+CadastroProdutos cadProd = new CadastroProdutos(repProd);
+Produto produto = cadProd.procurar(Integer.parseInt(codigoProduto));
    
 %>
 <script language="javascript">

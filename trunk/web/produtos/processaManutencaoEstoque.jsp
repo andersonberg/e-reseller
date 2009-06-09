@@ -1,4 +1,4 @@
-<%@page import="util.Mensagens, estoque.Estoque,fachada.Fachada, produto.exceptions.*" %>
+<%@page import="util.Mensagens, estoque.*, produto.exceptions.*" %>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <%
@@ -11,16 +11,17 @@
 <%}else{
             try {
                 Mensagens msn = new Mensagens();
-                Fachada fachada = (Fachada) session.getAttribute("FACHADA");
                 String codigoProduto = (String) request.getParameter("codigoProduto").toString();
                 String quantidade = (String) request.getParameter("edtQuantidade").toString();
                 String valor = (String) request.getParameter("edtValor").toString();
                 valor = valor.replace(",", ".");
                 String usuario =(String) session.getAttribute("ID_USU_LOGADO").toString();
-                Estoque estoque = fachada.procurarEstoqueProduto(Integer.parseInt(codigoProduto));
+                RepositorioEstoques repEstoque = new RepositorioEstoquesMySQL();
+                CadastroEstoques cadEstoque = new CadastroEstoques(repEstoque);
+                Estoque estoque = cadEstoque.procurar(Integer.parseInt(codigoProduto));
                 estoque = new Estoque(estoque.getId_est(),Integer.parseInt(codigoProduto),Integer.parseInt(quantidade),Float.parseFloat(valor), Integer.parseInt(usuario));
                 String informacao = null;
-                fachada.atualizarEstoque(estoque);
+                cadEstoque.atualizar(estoque);
                 informacao = "Estoque <strong>atualizado</strong> com sucesso.";
                 
 %>

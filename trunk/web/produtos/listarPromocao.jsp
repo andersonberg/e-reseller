@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="util.Mensagens,promocao.Promocao,produto.Produto,fachada.Fachada,java.util.*" %>
+<%@ page import="util.Mensagens,promocao.*,produto.*,java.util.*" %>
 <link rel="stylesheet" type="text/css" href="../estilo/si2009.css"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -14,12 +14,15 @@
 <% }else{
 
             String codigoProduto = request.getParameter("id").toString();
-            Fachada fachada = (Fachada) session.getAttribute("FACHADA");
             Promocao promocao = new Promocao(Integer.parseInt(codigoProduto));
-            Collection promocoes = fachada.procurarPromocoes(promocao);
+            RepositorioPromocoes repPro = new RepositorioPromocoesMySQL();
+            CadastroPromocoes cadPro = new CadastroPromocoes(repPro);
+            Collection promocoes = cadPro.procurarPromocoes(promocao);
             Iterator iPromocoes = promocoes.iterator();
-
-            Produto produto = fachada.procurarProduto(Integer.parseInt(codigoProduto));
+            
+            RepositorioProdutos repProd = new RepositorioProdutosMySQL();
+            CadastroProdutos cadProd = new CadastroProdutos(repProd);
+            Produto produto = cadProd.procurar(Integer.parseInt(codigoProduto));
 %>
 
 <SCRIPT language=JavaScript>

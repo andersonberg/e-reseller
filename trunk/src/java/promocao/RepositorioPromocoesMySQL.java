@@ -61,7 +61,7 @@ public class RepositorioPromocoesMySQL implements RepositorioPromocoes {
                     + "id_usu='" + promocao.getId_usu() + "' " 
                     + " WHERE id_pro='" + promocao.getId_pro()+ "'";
             stmt = gerenciador.getConnection().createStatement();
-           // query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
             int i = stmt.executeUpdate(query);
             if (i == 0) {
                 throw new PromocaoInexistenteException();
@@ -93,8 +93,8 @@ public class RepositorioPromocoesMySQL implements RepositorioPromocoes {
                     + promocao.getId_usu() +"')";
 
             stmt = gerenciador.getConnection().createStatement();
-           // query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
-            stmt.executeUpdate(query);
+            query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+            int i = stmt.executeUpdate(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);
@@ -189,8 +189,7 @@ public class RepositorioPromocoesMySQL implements RepositorioPromocoes {
         try {
             String query = "DELETE FROM promocao_pro WHERE id_prod= " + promocao.getId_prod();
             stmt = gerenciador.getConnection().createStatement();
-            stmt.executeUpdate(query);
-            resp=true;
+            int i = stmt.executeUpdate(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RepositorioException(ex);

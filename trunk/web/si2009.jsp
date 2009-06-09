@@ -13,7 +13,6 @@
             Mensagens msn = new Mensagens();
             session.setAttribute("USU_AUTENTICADO", "");
             session.setAttribute("ID_USU_LOGADO", "0");
-            session.setAttribute("FACHADA", "");
 %>
 <html><head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -27,7 +26,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td height="88" colspan="2" align="center" class="sub_titulo"><p><img src="img/logo_fornecedor.png"><br><img src="img/resseler.JPG"></p>                    
+                    <td height="88" colspan="2" align="center" class="sub_titulo"><p><img src="img/logo_fornecedor.png"></p>                    
                         <p>O <strong>E-Reseller</strong> propõe-se a  automatizar os serviços oferecidos pelo<br>sistema de revenda de modo a, através  de um w<em>ebservice</em>, prover informações<br>e comunicação entre a solicitações realizadas garantindo uma<br>liberação de  produtos para o sistema de transporte de modo eficiente.</p>
                         <p><br>
                     </p></td>
