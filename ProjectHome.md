@@ -1,0 +1,1 @@
+Projeto realizado na disciplina de Sistemas de Informação. Este é o módulo fornecedor de um negócio de e-commerce.
